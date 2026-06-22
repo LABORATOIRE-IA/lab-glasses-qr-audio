@@ -1,0 +1,36 @@
+# --- Repos de référence (clonés en lecture seule, jamais versionnés) ---
+# Évite d'imbriquer des dépôts git dans ce repo.
+reference/
+
+# --- Secrets ---
+.env
+.env.*
+*.key
+*.pem
+secrets/
+
+# --- Python ---
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+.pytest_cache/
+
+# --- Artefacts générés ---
+qr-codes/out/
+*.mp3
+*.wav
+*.m4a
+
+# --- OS / éditeurs ---
+.DS_Store
+.idea/
+.vscode/
+*~
+
+# --- iOS / Xcode (phase 2) ---
+*.xcuserstate
+DerivedData/
+*.xcworkspace/xcuserdata/
