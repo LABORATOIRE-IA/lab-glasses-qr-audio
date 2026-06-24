@@ -23,6 +23,18 @@ qr-codes/out/
 *.mp3
 *.wav
 *.m4a
+# Exception : les mp3 de PROD (pré-générés en local) DOIVENT être versionnés,
+# c'est tout ce que sert la prod (aucune clé / aucun TTS au runtime).
+!public/audio/
+!public/audio/*.mp3
+
+# --- Node / Next.js ---
+node_modules/
+.next/
+out/
+next-env.d.ts
+.vercel/
+*.tsbuildinfo
 
 # --- OS / éditeurs ---
 .DS_Store

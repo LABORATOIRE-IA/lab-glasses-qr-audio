@@ -1,101 +1,231 @@
 {
   "_schema": {
-    "description": "Source de vérité du contenu du POC. Chaque clé de premier niveau (hors _schema) est un IDENTIFIANT court encodé dans un QR (schéma 'labqr:<id>'). Un seul QR par artefact sert TOUTES les langues : l'app décode l'ID, choisit la langue, lit le texte ici, puis le passe à ElevenLabs TTS.",
+    "description": "Source de vérité du contenu. Chaque clé hors '_schema' est un id d'artefact (slug), encodé dans un QR via <BASE_URL>/play/<id>. Un seul QR par artefact sert toutes les langues.",
     "entry": {
-      "title": "Titre court, neutre de langue ou en fr (sert de libellé interne / planche contact).",
-      "lang": "Objet { code_langue: texte }. Langues actuelles : fr, en, es, de. Extensible : ajouter une langue = ajouter une clé, AUCUN changement de code."
+      "title": "Titre par langue { fr, en, es, de } — affiché sur la page visiteur.",
+      "text": "Texte lu par langue { fr, en, es, de } — source des mp3 TTS pré-générés.",
+      "tts": "Réglages ElevenLabs (voice_id, model_id, voice_settings). Stocké ici ; utilisé par le script de génération LOCAL, jamais en prod."
     },
-    "id_format": "artefact-NN (NN = 01..10). Le QR encode 'labqr:<id>'."
+    "id_format": "slug minuscules / chiffres / tirets (ex. artefact-01, reachy)."
   },
-
   "artefact-01": {
-    "title": "Bienvenue",
-    "lang": {
+    "title": {
+      "fr": "Bienvenue",
+      "en": "",
+      "es": "",
+      "de": ""
+    },
+    "text": {
       "fr": "Bienvenue à l'Agentic Livepoint, le showroom du Lab IA de Onepoint. Scannez les QR codes pour en savoir plus.",
       "en": "Welcome to the Agentic Livepoint, the showroom of Onepoint's AI Lab. Scan the QR codes to learn more.",
       "es": "Bienvenido al Agentic Livepoint, el showroom del Lab de IA de Onepoint. Escanea los códigos QR para saber más.",
       "de": "Willkommen im Agentic Livepoint, dem Showroom des KI-Labs von Onepoint. Scannen Sie die QR-Codes, um mehr zu erfahren."
+    },
+    "tts": {
+      "voice_id": "21m00Tcm4TlvDq8ikWAM",
+      "model_id": "eleven_multilingual_v2",
+      "voice_settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75
+      }
     }
   },
   "artefact-02": {
-    "title": "Les lunettes Ray-Ban Meta",
-    "lang": {
+    "title": {
+      "fr": "Les lunettes Ray-Ban Meta",
+      "en": "",
+      "es": "",
+      "de": ""
+    },
+    "text": {
       "fr": "Ces lunettes Ray-Ban Meta jouent un audio dans votre langue grâce à leurs haut-parleurs open-ear.",
       "en": "These Ray-Ban Meta glasses play audio in your language through their open-ear speakers.",
       "es": "Estas gafas Ray-Ban Meta reproducen audio en tu idioma mediante sus altavoces open-ear.",
       "de": "Diese Ray-Ban-Meta-Brille spielt Audio in Ihrer Sprache über ihre Open-Ear-Lautsprecher ab."
+    },
+    "tts": {
+      "voice_id": "21m00Tcm4TlvDq8ikWAM",
+      "model_id": "eleven_multilingual_v2",
+      "voice_settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75
+      }
     }
   },
   "artefact-03": {
-    "title": "Comment ça marche",
-    "lang": {
+    "title": {
+      "fr": "Comment ça marche",
+      "en": "",
+      "es": "",
+      "de": ""
+    },
+    "text": {
       "fr": "Chaque QR encode un identifiant. L'application retrouve le texte associé et le lit à voix haute.",
       "en": "Each QR encodes an identifier. The app looks up the matching text and reads it aloud.",
       "es": "Cada QR codifica un identificador. La aplicación busca el texto correspondiente y lo lee en voz alta.",
       "de": "Jeder QR codiert eine Kennung. Die App sucht den passenden Text und liest ihn vor."
+    },
+    "tts": {
+      "voice_id": "21m00Tcm4TlvDq8ikWAM",
+      "model_id": "eleven_multilingual_v2",
+      "voice_settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75
+      }
     }
   },
   "artefact-04": {
-    "title": "Le Lab IA",
-    "lang": {
+    "title": {
+      "fr": "Le Lab IA",
+      "en": "",
+      "es": "",
+      "de": ""
+    },
+    "text": {
       "fr": "Le Lab IA de Onepoint explore les usages concrets de l'intelligence artificielle générative et agentique.",
       "en": "Onepoint's AI Lab explores concrete uses of generative and agentic artificial intelligence.",
       "es": "El Lab de IA de Onepoint explora usos concretos de la inteligencia artificial generativa y agéntica.",
       "de": "Das KI-Lab von Onepoint erforscht konkrete Anwendungen generativer und agentischer KI."
+    },
+    "tts": {
+      "voice_id": "21m00Tcm4TlvDq8ikWAM",
+      "model_id": "eleven_multilingual_v2",
+      "voice_settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75
+      }
     }
   },
   "artefact-05": {
-    "title": "Audio multilingue",
-    "lang": {
+    "title": {
+      "fr": "Audio multilingue",
+      "en": "",
+      "es": "",
+      "de": ""
+    },
+    "text": {
       "fr": "Choisissez votre langue : le même artefact vous parle en français, anglais, espagnol ou allemand.",
       "en": "Choose your language: the same artefact speaks to you in French, English, Spanish or German.",
       "es": "Elige tu idioma: el mismo artefacto te habla en francés, inglés, español o alemán.",
       "de": "Wählen Sie Ihre Sprache: dasselbe Objekt spricht zu Ihnen auf Französisch, Englisch, Spanisch oder Deutsch."
+    },
+    "tts": {
+      "voice_id": "21m00Tcm4TlvDq8ikWAM",
+      "model_id": "eleven_multilingual_v2",
+      "voice_settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75
+      }
     }
   },
   "artefact-06": {
-    "title": "Synthèse vocale",
-    "lang": {
+    "title": {
+      "fr": "Synthèse vocale",
+      "en": "",
+      "es": "",
+      "de": ""
+    },
+    "text": {
       "fr": "La voix est générée par synthèse vocale ElevenLabs, pour un rendu naturel dans chaque langue.",
       "en": "The voice is generated by ElevenLabs text-to-speech, for a natural result in every language.",
       "es": "La voz se genera con la síntesis de voz de ElevenLabs, para un resultado natural en cada idioma.",
       "de": "Die Stimme wird per ElevenLabs-Sprachsynthese erzeugt, für ein natürliches Ergebnis in jeder Sprache."
+    },
+    "tts": {
+      "voice_id": "21m00Tcm4TlvDq8ikWAM",
+      "model_id": "eleven_multilingual_v2",
+      "voice_settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75
+      }
     }
   },
   "artefact-07": {
-    "title": "Vision par ordinateur",
-    "lang": {
+    "title": {
+      "fr": "Vision par ordinateur",
+      "en": "",
+      "es": "",
+      "de": ""
+    },
+    "text": {
       "fr": "La caméra des lunettes lit le QR code ; à l'avenir, elle pourra aussi reconnaître les objets eux-mêmes.",
       "en": "The glasses' camera reads the QR code; in the future, it could also recognise the objects themselves.",
       "es": "La cámara de las gafas lee el código QR; en el futuro, podría reconocer también los propios objetos.",
       "de": "Die Kamera der Brille liest den QR-Code; künftig könnte sie auch die Objekte selbst erkennen."
+    },
+    "tts": {
+      "voice_id": "21m00Tcm4TlvDq8ikWAM",
+      "model_id": "eleven_multilingual_v2",
+      "voice_settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75
+      }
     }
   },
   "artefact-08": {
-    "title": "Sans les mains",
-    "lang": {
+    "title": {
+      "fr": "Sans les mains",
+      "en": "",
+      "es": "",
+      "de": ""
+    },
+    "text": {
       "fr": "Tout se passe sans écran ni manipulation : vous regardez, vous écoutez, vous avancez.",
       "en": "Everything happens with no screen and no handling: you look, you listen, you move on.",
       "es": "Todo ocurre sin pantalla ni manipulación: miras, escuchas y sigues adelante.",
       "de": "Alles geschieht ohne Bildschirm und ohne Hantieren: Sie schauen, Sie hören, Sie gehen weiter."
+    },
+    "tts": {
+      "voice_id": "21m00Tcm4TlvDq8ikWAM",
+      "model_id": "eleven_multilingual_v2",
+      "voice_settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75
+      }
     }
   },
   "artefact-09": {
-    "title": "Confidentialité",
-    "lang": {
+    "title": {
+      "fr": "Confidentialité",
+      "en": "",
+      "es": "",
+      "de": ""
+    },
+    "text": {
       "fr": "Aucune donnée personnelle n'est nécessaire pour écouter les contenus de la visite.",
       "en": "No personal data is required to listen to the tour's content.",
       "es": "No se necesita ningún dato personal para escuchar los contenidos de la visita.",
       "de": "Für das Anhören der Tour-Inhalte sind keine personenbezogenen Daten erforderlich."
+    },
+    "tts": {
+      "voice_id": "21m00Tcm4TlvDq8ikWAM",
+      "model_id": "eleven_multilingual_v2",
+      "voice_settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75
+      }
     }
   },
   "artefact-10": {
-    "title": "Merci",
-    "lang": {
+    "title": {
+      "fr": "Merci",
+      "en": "",
+      "es": "",
+      "de": ""
+    },
+    "text": {
       "fr": "Merci de votre visite à l'Agentic Livepoint. À bientôt au Lab IA de Onepoint !",
       "en": "Thank you for visiting the Agentic Livepoint. See you soon at Onepoint's AI Lab!",
       "es": "Gracias por tu visita al Agentic Livepoint. ¡Hasta pronto en el Lab de IA de Onepoint!",
       "de": "Danke für Ihren Besuch im Agentic Livepoint. Bis bald im KI-Lab von Onepoint!"
+    },
+    "tts": {
+      "voice_id": "21m00Tcm4TlvDq8ikWAM",
+      "model_id": "eleven_multilingual_v2",
+      "voice_settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75
+      }
     }
   }
 }

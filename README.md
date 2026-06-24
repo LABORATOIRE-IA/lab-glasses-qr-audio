@@ -1,114 +1,103 @@
-# Lunettes Ray-Ban Meta : QR → audio multilingue
+# Lunettes Ray-Ban Meta : QR → audio multilingue (web app)
 
 POC pour l'**Agentic Livepoint** (showroom du Lab IA de Onepoint).
-Un visiteur **scanne un QR code** posé sur un artefact → les **lunettes Ray-Ban Meta**
-jouent un **audio explicatif** dans la **langue choisie**, via les haut-parleurs *open-ear*.
+Un visiteur **scanne un QR code** posé sur un artefact → son téléphone ouvre une
+**page web** → il choisit sa langue et touche **« ▶ Écouter »** → l'audio sort dans
+les **lunettes Ray-Ban Meta** (haut-parleurs *open-ear*, via Bluetooth).
 
-## Comment ça marche
-Le QR encode un **identifiant court**. L'app décode l'ID, retrouve le texte associé
-(`content/content.json`, par langue), le synthétise en audio avec **ElevenLabs (TTS)**,
-puis le joue dans les lunettes.
-
+## Architecture (pivot web)
 ```
-QR (ID) → décodage → lookup texte (par langue) → ElevenLabs TTS → audio
+QR (encode <BASE_URL>/play/<id>)
+  → la page /play/<id> lit content.json (texte par langue)
+  → joue un mp3 PRÉ-GÉNÉRÉ /audio/<id>-<lang>.mp3
 ```
+- **Génération de l'audio = LOCAL uniquement** (`scripts/generate-audio.mjs`, ElevenLabs).
+- **Prod = mp3 statiques.** Aucune clé, aucun appel ElevenLabs au runtime.
 
-## Phases
-1. **Prototype local** (Python, sans lunettes) — toute la chaîne QR → audio. *(priorité)*
-2. **App mobile** iOS Swift + Meta DAT SDK (mock device).
-3. **Lunettes réelles** Ray-Ban Meta Gen 2.
+> Hypothèse critique testée par ce POC : *le son route-t-il bien vers les lunettes
+> quand on touche « ▶ Écouter » dans le navigateur ?* Tout le reste (admin, 40 clips)
+> n'est construit qu'**après** validation de ce test.
+
+## Stack
+Next.js (App Router) + TypeScript + Tailwind · déploiement **Vercel** ·
+stockage = **fichiers + git** (pas de base de données).
 
 ## Structure
 | Dossier | Rôle |
 |---------|------|
-| `content/` | textes par langue (`content.json`) |
-| `qr-codes/` | génération des QR + sorties |
-| `pipeline/` | prototype phone-mode (phase 1) |
-| `app/` | app mobile Swift (phase 2) |
-| `reference/` | repos de référence (lecture seule, non versionnés) |
-| `docs/` | specs & notes |
+| `app/` | Next.js : `play/[id]/` = page visiteur (`page.tsx` + `Player.tsx`) |
+| `lib/content.ts` | accès typé à `content.json` (source unique) |
+| `scripts/generate-audio.mjs` | génération mp3 ElevenLabs (**local**) |
+| `public/audio/` | mp3 pré-générés, servis en statique (**versionnés**) |
+| `content/content.json` | **source de vérité** : textes par langue |
+| `qr-codes/generate_qr.py` | génère les QR `<BASE_URL>/play/<id>` |
+| `pipeline/` | héritage Phase 1 : `pronunciations.json`, `.env` (clé) |
 
-## Génération des QR
-Les QR sont générés à partir de `content/content.json` (source de vérité des IDs).
-Chaque QR encode **`labqr:<id>`** (ex. `labqr:artefact-01`) — le préfixe `labqr:`
-permet à l'app de reconnaître nos QR et d'ignorer tout autre QR.
+## Modèle de données — `content/content.json`
+Source de vérité **unique** (ne pas dupliquer). Chaque clé de premier niveau (hors
+`_schema`) est un **id d'artefact** (`artefact-01` … `artefact-10`) :
+```json
+"artefact-01": {
+  "title": "Bienvenue",
+  "lang": { "fr": "…", "en": "…", "es": "…", "de": "…" }
+}
+```
+- `title` : libellé court (interne / planche contact QR).
+- `lang` : texte par code langue (`fr`, `en`, `es`, `de`). Ajouter une langue = ajouter
+  une clé (et générer les mp3 correspondants) — aucun changement de code.
+- Les clés préfixées `_` (ex. `_schema`) sont des métadonnées, ignorées partout.
 
+---
+
+## (a) Développement local
+```bash
+npm install
+npm run dev          # http://localhost:3000  → page visiteur : /play/artefact-01
+```
+
+## (b) Générer l'audio (LOCAL uniquement)
+La clé vit dans **`.env.local`** (gitignored, reprise de `pipeline/.env`) :
+```
+ELEVENLABS_API_KEY=…        # LOCAL UNIQUEMENT — jamais en prod
+ELEVENLABS_VOICE_ID=21m00Tcm4TlvDq8ikWAM
+ELEVENLABS_MODEL_ID=eleven_multilingual_v2
+```
+```bash
+# tout (10 ids × 4 langues), saute les mp3 déjà présents :
+npm run gen:audio
+# cibler un id / une langue :
+node --env-file=.env.local scripts/generate-audio.mjs --id artefact-01 --lang fr
+# régénérer (ignore l'existant) — ex. après modif de pronunciations.json :
+node --env-file=.env.local scripts/generate-audio.mjs --force
+```
+Sortie : `public/audio/<id>-<lang>.mp3`. **Ces fichiers sont versionnés** (c'est tout
+ce que sert la prod). Normalisation de prononciation appliquée avant l'appel
+(table [`pipeline/pronunciations.json`](pipeline/pronunciations.json), ex. `IA → I.A.`,
+remplacement **mot entier, sensible à la casse**).
+
+## (c) Déployer sur Vercel
+```bash
+npm i -g vercel        # si besoin
+vercel                 # 1er déploiement (preview) — suivre les invites
+vercel --prod          # déploiement production → renvoie l'URL de prod
+```
+> 🔒 **NE PAS** ajouter `ELEVENLABS_API_KEY` (ni VOICE/MODEL) dans les variables
+> d'environnement Vercel. La prod ne sert que des mp3 statiques : aucune clé n'y a sa
+> place. `.env.local` est gitignored et n'est jamais envoyé.
+
+## (d) Générer les QR (une fois l'URL de prod connue)
 ```bash
 python3 -m venv .venv
 .venv/bin/pip install -r qr-codes/requirements.txt
-.venv/bin/python qr-codes/generate_qr.py
+
+# le QR de test du POC :
+BASE=https://<ton-app>.vercel.app
+.venv/bin/python qr-codes/generate_qr.py --base-url "$BASE" --id artefact-01
+# les 10 QR + planche contact à imprimer :
+.venv/bin/python qr-codes/generate_qr.py --base-url "$BASE"
 ```
-
-Sorties dans `qr-codes/out/` (gitignored) :
-- un PNG par artefact (`artefact-01.png` … `artefact-10.png`), QR niveau H, ≥ 600 px,
-  ID écrit en clair sous le code ;
-- `_contact-sheet.png` : planche contact (grille des 10 QR labellisés), prête à imprimer.
-
-## Pipeline (phase 1)
-Chaîne locale, sans lunettes : **décodage QR (OpenCV) → lookup `content.json` →
-ElevenLabs TTS → lecture audio (`afplay`)**. Décodage via `cv2.QRCodeDetector`
-(wheel `opencv-python`, aucun install admin, pas de `zbar`).
-
-### Installation
-```bash
-python3 -m venv .venv
-.venv/bin/pip install -r pipeline/requirements.txt
-```
-
-### Clé ElevenLabs (jamais commitée)
-```bash
-cp pipeline/.env.example pipeline/.env   # puis renseigner ELEVENLABS_API_KEY
-```
-`pipeline/.env` est gitignored. Voix/modèle configurables (`ELEVENLABS_VOICE_ID`,
-`ELEVENLABS_MODEL_ID`, défaut `eleven_multilingual_v2`).
-
-### Commandes
-```bash
-# Décoder un PNG + jouer l'audio dans une langue
-.venv/bin/python pipeline/qr_audio_pipeline.py --image qr-codes/out/artefact-01.png --lang en
-
-# Mode "phone" : webcam du laptop (capture live, stand-in avant les lunettes)
-.venv/bin/python pipeline/qr_audio_pipeline.py --webcam --lang es
-
-# Décoder + afficher le texte SANS audio (test rapide)
-.venv/bin/python pipeline/qr_audio_pipeline.py --image qr-codes/out/artefact-01.png --no-tts
-
-# Forcer la régénération TTS (ignore le cache)
-.venv/bin/python pipeline/qr_audio_pipeline.py --image qr-codes/out/artefact-01.png --lang de --no-cache
-```
-Options : `--lang fr|en|es|de` (défaut `fr`, fallback `fr` si langue absente),
-`--no-cache`, `--no-tts`. L'audio est mis en cache dans `pipeline/audio_cache/<id>_<lang>.mp3`
-(gitignored) et réutilisé aux scans suivants.
-
-#### Mode webcam (live)
-Une fenêtre OpenCV s'ouvre et détecte les QR en continu ; chaque scan déclenche la chaîne
-complète (lookup → normalisation → TTS/cache → audio). Un même QR resté dans le champ n'est
-**pas rejoué en boucle** (cooldown 3 s + réarmement quand le QR sort puis revient).
-
-Raccourcis dans la fenêtre : **`q`** ou Échap = quitter (libère la caméra) ;
-**`f`/`e`/`s`/`d`** = changer la langue à la volée (fr/en/es/de).
-
-> ⚠️ macOS demande l'**autorisation caméra** au terminal qui lance le script :
-> **Réglages → Confidentialité et sécurité → Caméra**, autorise ton terminal, puis relance.
-> Si la caméra est indisponible/refusée, le script affiche un message clair et ne plante pas.
-
-### Prononciation (normalisation TTS)
-`eleven_multilingual_v2` ne supporte pas le SSML `<phoneme>`, donc on corrige certains
-termes **côté texte**, juste avant l'appel API. Table éditable :
-[`pipeline/pronunciations.json`](pipeline/pronunciations.json).
-
-```json
-{ "IA": "I.A." }
-```
-Remplacement **mot entier** (`\bIA\b`) et **sensible à la casse** → ne casse pas
-`média`, `diagnostic`, `spécial`… Ajoute d'autres sigles/marques au besoin.
-Après modif, régénère les clips concernés avec `--no-cache` (le cache est indexé par
-`id_lang`, pas par le texte).
-
-### Test round-trip (génération ↔ décodage)
-```bash
-.venv/bin/python pipeline/test_decode.py   # décode les 10 PNG, attend 'labqr:artefact-NN'
-```
+Chaque QR encode `<BASE_URL>/play/<id>` (niveau H, ≥ 600 px, id en clair dessous).
+Sorties dans `qr-codes/out/` (gitignored) ; `_contact-sheet.png` = planche contact.
 
 ## Détails
-Voir [`CLAUDE.md`](./CLAUDE.md) pour l'architecture, les faits techniques et les conventions.
+Voir [`CLAUDE.md`](./CLAUDE.md) pour le contexte, les faits techniques et les conventions.
