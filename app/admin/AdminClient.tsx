@@ -5,6 +5,7 @@
 // /api/admin/tts (clé serveur uniquement). Pas de QR ici, pas de « tout générer ».
 
 import { useCallback, useEffect, useState } from "react";
+import QRCode from "qrcode";
 import {
   LANGS,
   DEFAULT_LANG,
@@ -126,6 +127,13 @@ export default function AdminClient() {
     setAudio((prev) => ({ ...prev, [audioKey(id, lang)]: true }));
   }, []);
 
+  // BASE_URL des QR : NEXT_PUBLIC_BASE_URL (prod) sinon l'origine courante (localhost).
+  const envBase = process.env.NEXT_PUBLIC_BASE_URL?.trim();
+  const [origin, setOrigin] = useState("");
+  useEffect(() => setOrigin(window.location.origin), []);
+  const baseUrl = envBase || origin;
+  const baseConfigured = !!envBase;
+
   return (
     <main className="mx-auto max-w-5xl p-6">
       <header className="mb-6 flex items-center justify-between">
@@ -152,6 +160,19 @@ export default function AdminClient() {
         </p>
       )}
 
+      {!baseConfigured && (
+        <p className="mb-4 rounded-lg bg-amber-50 px-4 py-2 text-sm font-medium text-amber-800">
+          ⚠️ URL de prod non configurée — les QR pointent vers{" "}
+          <code className="rounded bg-amber-100 px-1">
+            {origin || "localhost"}
+          </code>{" "}
+          et ne seront pas scannables. Définis{" "}
+          <code className="rounded bg-amber-100 px-1">NEXT_PUBLIC_BASE_URL</code> dans{" "}
+          <code className="rounded bg-amber-100 px-1">.env.local</code> puis relance{" "}
+          <code className="rounded bg-amber-100 px-1">npm run dev</code>.
+        </p>
+      )}
+
       {!content ? (
         <p className="text-neutral-500">Chargement…</p>
       ) : Object.keys(content).length === 0 ? (
@@ -164,6 +185,7 @@ export default function AdminClient() {
               <th className="py-2">Titre (FR)</th>
               <th className="py-2 text-center">Texte</th>
               <th className="py-2 text-center">Audio</th>
+              <th className="py-2 text-center">QR</th>
               <th className="py-2 text-right">Actions</th>
             </tr>
           </thead>
@@ -218,6 +240,10 @@ export default function AdminClient() {
                     })}
                   </div>
                 </td>
+                {/* QR live (client-side) + download PNG */}
+                <td className="py-2">
+                  <QrCell id={id} baseUrl={baseUrl} />
+                </td>
                 <td className="py-2 text-right whitespace-nowrap">
                   <button
                     type="button"
@@ -255,6 +281,77 @@ export default function AdminClient() {
         />
       )}
     </main>
+  );
+}
+
+// ───────────────────────────── QR (client-side) ─────────────────────────────
+
+// Encode <BASE_URL>/play/<id> (une PAGE, jamais un mp3), niveau de correction H.
+// Aperçu live + export PNG haute résolution (~820px, fort contraste) pour l'impression.
+// Cohérent avec qr-codes/generate_qr.py (même URL cible, même niveau H).
+function qrUrl(baseUrl: string, id: string): string {
+  return baseUrl ? `${baseUrl.replace(/\/+$/, "")}/play/${id}` : "";
+}
+
+function QrCell({ id, baseUrl }: { id: string; baseUrl: string }) {
+  const url = qrUrl(baseUrl, id);
+  const [preview, setPreview] = useState("");
+
+  useEffect(() => {
+    if (!url) {
+      setPreview("");
+      return;
+    }
+    let alive = true;
+    QRCode.toDataURL(url, { errorCorrectionLevel: "H", margin: 2, width: 96 })
+      .then((d) => alive && setPreview(d))
+      .catch(() => alive && setPreview(""));
+    return () => {
+      alive = false;
+    };
+  }, [url]);
+
+  async function download() {
+    if (!url) return;
+    // Haute résolution pour l'impression : ~820px, niveau H, noir/blanc plein contraste.
+    const dataUrl = await QRCode.toDataURL(url, {
+      errorCorrectionLevel: "H",
+      margin: 4,
+      width: 820,
+      color: { dark: "#000000", light: "#ffffff" },
+    });
+    const a = document.createElement("a");
+    a.href = dataUrl;
+    a.download = `${id}.png`; // nommage déterministe
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  }
+
+  return (
+    <div className="flex flex-col items-center gap-1">
+      {preview ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={preview}
+          alt={`QR ${id}`}
+          width={72}
+          height={72}
+          title={url}
+          className="rounded border border-neutral-200"
+        />
+      ) : (
+        <span className="text-xs text-neutral-300">…</span>
+      )}
+      <button
+        type="button"
+        onClick={download}
+        disabled={!url}
+        className="text-xs font-medium text-neutral-700 underline disabled:opacity-40"
+      >
+        Télécharger PNG
+      </button>
+    </div>
   );
 }
 
