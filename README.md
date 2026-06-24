@@ -67,7 +67,7 @@ cp pipeline/.env.example pipeline/.env   # puis renseigner ELEVENLABS_API_KEY
 # Décoder un PNG + jouer l'audio dans une langue
 .venv/bin/python pipeline/qr_audio_pipeline.py --image qr-codes/out/artefact-01.png --lang en
 
-# Mode "phone" : webcam du laptop (premier QR détecté)
+# Mode "phone" : webcam du laptop (capture live, stand-in avant les lunettes)
 .venv/bin/python pipeline/qr_audio_pipeline.py --webcam --lang es
 
 # Décoder + afficher le texte SANS audio (test rapide)
@@ -79,6 +79,31 @@ cp pipeline/.env.example pipeline/.env   # puis renseigner ELEVENLABS_API_KEY
 Options : `--lang fr|en|es|de` (défaut `fr`, fallback `fr` si langue absente),
 `--no-cache`, `--no-tts`. L'audio est mis en cache dans `pipeline/audio_cache/<id>_<lang>.mp3`
 (gitignored) et réutilisé aux scans suivants.
+
+#### Mode webcam (live)
+Une fenêtre OpenCV s'ouvre et détecte les QR en continu ; chaque scan déclenche la chaîne
+complète (lookup → normalisation → TTS/cache → audio). Un même QR resté dans le champ n'est
+**pas rejoué en boucle** (cooldown 3 s + réarmement quand le QR sort puis revient).
+
+Raccourcis dans la fenêtre : **`q`** ou Échap = quitter (libère la caméra) ;
+**`f`/`e`/`s`/`d`** = changer la langue à la volée (fr/en/es/de).
+
+> ⚠️ macOS demande l'**autorisation caméra** au terminal qui lance le script :
+> **Réglages → Confidentialité et sécurité → Caméra**, autorise ton terminal, puis relance.
+> Si la caméra est indisponible/refusée, le script affiche un message clair et ne plante pas.
+
+### Prononciation (normalisation TTS)
+`eleven_multilingual_v2` ne supporte pas le SSML `<phoneme>`, donc on corrige certains
+termes **côté texte**, juste avant l'appel API. Table éditable :
+[`pipeline/pronunciations.json`](pipeline/pronunciations.json).
+
+```json
+{ "IA": "I.A." }
+```
+Remplacement **mot entier** (`\bIA\b`) et **sensible à la casse** → ne casse pas
+`média`, `diagnostic`, `spécial`… Ajoute d'autres sigles/marques au besoin.
+Après modif, régénère les clips concernés avec `--no-cache` (le cache est indexé par
+`id_lang`, pas par le texte).
 
 ### Test round-trip (génération ↔ décodage)
 ```bash

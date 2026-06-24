@@ -99,3 +99,32 @@ TTS : **ElevenLabs** (multilingue) sur toutes les phases.
   "Pipeline (phase 1)" ajoutée au README. NB : `from __future__ import annotations` pour
   rester compatible Python 3.9. Étape A (décodage+lookup) validée ; Étape B (TTS) en attente
   de la clé + validation ; `--webcam` codé mais test à valider.
+- **2026-06-22** — Étape B validée (chaîne fichier → texte → TTS → audio → cache) :
+  `artefact-01` généré et joué via `afplay` en EN (102 Ko) et FR (118 Ko), prononciation
+  correcte dans les deux langues (`eleven_multilingual_v2`). Cache vérifié : 2ᵉ appel EN →
+  « cache réutilisé », aucun 2ᵉ appel API. Robustesse OK (messages clairs, pas de stacktrace) :
+  QR sans préfixe `labqr:` → ignoré ; id inconnu → liste des ids connus ; clé absente →
+  message « ELEVENLABS_API_KEY manquante » ; clé invalide → erreur 401 explicite. `pipeline/.env`
+  confirmé gitignored (clé jamais commitée), `audio_cache/` absent du suivi git. Note : la clé
+  ElevenLabs doit avoir la permission **text_to_speech** (sinon 401 missing_permissions).
+  `--webcam` non encore testé (prochaine étape, sur validation).
+- **2026-06-22** — Normalisation de prononciation TTS : `eleven_multilingual_v2` ne supporte
+  pas le SSML `<phoneme>`, donc on corrige côté TEXTE juste avant l'appel API
+  (`normalize_pronunciation`, après le lookup). Table éditable `pipeline/pronunciations.json`
+  ({"IA": "I.A."}), remplacement **mot entier + sensible à la casse** (`\bIA\b`, pas de
+  IGNORECASE) → ne casse pas média/diagnostic/spécial. Motif : le FR prononçait « IA » comme
+  « aya » ; « I.A. » force la lecture lettre par lettre (si insuffisant, tester « I-A » / « I A »).
+  Clip `artefact-01` FR régénéré avec `--no-cache` (le cache est indexé par `id_lang`, pas par
+  le texte → régénérer après toute modif de la table). Reste (cache, modes, webcam) inchangé.
+- **2026-06-22** — Mode `--webcam` (live, stand-in « phone mode ») : boucle OpenCV
+  (`cv2.VideoCapture` + `detectAndDecode` par frame) branchée sur la chaîne aval existante,
+  factorisée dans `handle_payload()` (réutilisée par `--image` et `--webcam`, zéro régression
+  vérifiée). Debounce : un même payload n'est pas rejoué avant `WEBCAM_COOLDOWN_S` (3 s) et un
+  QR sorti puis re-rentré (`ABSENCE_FRAMES_RESET` frames sans détection) réarme → un scan = une
+  lecture. HUD overlay (langue, dernier id joué, aide) + cadre vert sur le QR. Touches : `q`/Échap
+  = quitter (libère la caméra) ; `f/e/s/d` = langue à la volée (réarme le QR présent). Lecture
+  non bloquante en webcam (`play_audio(block=False)` → `Popen`) pour ne pas figer le flux ;
+  `--image` reste bloquant. Robustesse : caméra indisponible/permission refusée → `SystemExit`
+  avec message clair (testé via index forcé), `cap.release()` + `destroyAllWindows()` en `finally`.
+  README : commande `--webcam` + note autorisation caméra macOS. OpenCV uniquement, aucune
+  nouvelle dépendance.

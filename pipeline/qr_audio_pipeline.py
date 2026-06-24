@@ -24,9 +24,11 @@ from __future__ import annotations  # annotations PEP 604 (str | None) compatibl
 import argparse
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 import cv2
@@ -38,6 +40,7 @@ ROOT = Path(__file__).resolve().parent.parent
 CONTENT_JSON = ROOT / "content" / "content.json"
 CACHE_DIR = ROOT / "pipeline" / "audio_cache"
 ENV_PATH = ROOT / "pipeline" / ".env"
+PRONUNCIATIONS_JSON = ROOT / "pipeline" / "pronunciations.json"
 
 # --- Constantes ---
 QR_PREFIX = "labqr:"
@@ -46,6 +49,11 @@ FALLBACK_LANG = "fr"
 ELEVENLABS_TTS_URL = "https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
 DEFAULT_VOICE_ID = "21m00Tcm4TlvDq8ikWAM"   # "Rachel", multilingue
 DEFAULT_MODEL_ID = "eleven_multilingual_v2"
+
+# Webcam (mode --webcam)
+LANG_KEYS = {ord("f"): "fr", ord("e"): "en", ord("s"): "es", ord("d"): "de"}
+WEBCAM_COOLDOWN_S = 3.0   # même QR resté dans le champ : pas de re-déclenchement avant ce délai
+ABSENCE_FRAMES_RESET = 5  # nb de frames sans QR avant de "réarmer" (QR sorti puis re-rentré)
 
 
 # ───────────────────────────── 1. DÉCODAGE QR ─────────────────────────────
@@ -59,31 +67,80 @@ def decode_qr_from_image(image_path: Path) -> str | None:
     return data or None
 
 
-def decode_qr_from_webcam() -> str | None:
-    """Capture live (stand-in 'phone mode') et renvoie le premier QR détecté.
+def _draw_overlay(frame, lines: list[str]) -> None:
+    """Affiche quelques lignes de texte en surimpression (HUD de démo)."""
+    for i, line in enumerate(lines):
+        y = 30 + i * 30
+        cv2.putText(frame, line, (12, y), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 4, cv2.LINE_AA)
+        cv2.putText(frame, line, (12, y), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 1, cv2.LINE_AA)
 
-    'q' ou Échap pour annuler. Renvoie le payload ou None si annulé.
+
+def run_webcam(content: dict, lang: str, *, use_cache: bool, no_tts: bool) -> None:
+    """Capture live (stand-in 'phone mode') : détecte les QR en continu et déclenche
+    la chaîne aval (lookup -> normalisation -> TTS/cache -> afplay) à chaque scan.
+
+    Debounce : un même QR resté dans le champ n'est pas rejoué avant WEBCAM_COOLDOWN_S,
+    et un QR sorti puis re-rentré (>= ABSENCE_FRAMES_RESET frames sans détection) réarme.
+    Touches : q/Échap = quitter ; f/e/s/d = changer la langue à la volée.
     """
     detector = cv2.QRCodeDetector()
     cap = cv2.VideoCapture(0)
     if not cap.isOpened():
-        raise SystemExit("Webcam inaccessible (autorise l'accès caméra au terminal).")
-    print("Webcam active — présente un QR. 'q' pour quitter.")
+        cap.release()
+        raise SystemExit(
+            "Webcam inaccessible. Autorise l'accès caméra : "
+            "Réglages → Confidentialité et sécurité → Caméra, puis relance."
+        )
+    print("📷 Webcam active — présente un QR. Touches : q=quitter, f/e/s/d=langue.")
+
+    last_payload = None       # dernier payload déclenché (pour le debounce)
+    last_trigger = -1e9       # time.monotonic du dernier déclenchement
+    empty_frames = 0          # frames consécutives sans QR (détecte la sortie du champ)
+    status = "En attente d'un QR…"
+    lost_frames = 0           # robustesse : caméra qui décroche
     try:
         while True:
             ok, frame = cap.read()
             if not ok:
+                lost_frames += 1
+                if lost_frames > 100:
+                    print("⚠️  Flux caméra perdu — arrêt.")
+                    break
                 continue
+            lost_frames = 0
+
             data, points, _ = detector.detectAndDecode(frame)
-            if points is not None:  # dessine le cadre détecté
-                pts = points.astype(int).reshape(-1, 2)
-                for i in range(len(pts)):
-                    cv2.line(frame, tuple(pts[i]), tuple(pts[(i + 1) % len(pts)]), (0, 255, 0), 3)
-            cv2.imshow("Lab QR — webcam (q pour quitter)", frame)
+
             if data:
-                return data
-            if cv2.waitKey(1) & 0xFF in (ord("q"), 27):
-                return None
+                left_and_back = empty_frames >= ABSENCE_FRAMES_RESET
+                empty_frames = 0
+                if points is not None:  # cadre vert autour du QR
+                    pts = points.astype(int).reshape(-1, 2)
+                    for i in range(len(pts)):
+                        cv2.line(frame, tuple(pts[i]), tuple(pts[(i + 1) % len(pts)]), (0, 255, 0), 3)
+
+                now = time.monotonic()
+                is_new = data != last_payload
+                cooldown_ok = (now - last_trigger) >= WEBCAM_COOLDOWN_S
+                if is_new or left_and_back or cooldown_ok:
+                    last_payload, last_trigger = data, now
+                    print(f"\n📷 Scan : '{data}' (langue {lang})")
+                    res = handle_payload(content, data, lang,
+                                         use_cache=use_cache, no_tts=no_tts, play_block=False)
+                    status = (f"▶ {res[0]} en {res[1]}" if res else "QR non reconnu")
+            else:
+                empty_frames += 1
+
+            _draw_overlay(frame, [f"Langue: {lang}  (f/e/s/d)", status, "q = quitter"])
+            cv2.imshow("Lab QR — webcam", frame)
+
+            key = cv2.waitKey(1) & 0xFF
+            if key in (ord("q"), 27):
+                break
+            if key in LANG_KEYS:
+                lang = LANG_KEYS[key]
+                last_payload = None  # réarme : le QR présent rejoue dans la nouvelle langue
+                print(f"🌐 Langue -> {lang}")
     finally:
         cap.release()
         cv2.destroyAllWindows()
@@ -128,6 +185,27 @@ def lookup(content: dict, artefact_id: str, lang: str) -> tuple[str, str, str] |
     return entry.get("title", artefact_id), text, used_lang
 
 
+# ─────────────────────── 3bis. NORMALISATION PRONONCIATION ────────────────
+
+def normalize_pronunciation(text: str) -> str:
+    """Applique la table pipeline/pronunciations.json au texte AVANT le TTS.
+
+    eleven_multilingual_v2 ne supporte pas le SSML <phoneme> : on corrige donc
+    certains sigles/marques côté texte (ex. 'IA' -> 'I.A.' pour une lecture 'i-a').
+    Remplacement par MOT ENTIER (\\bCLE\\b) et SENSIBLE À LA CASSE : on ne touche
+    pas aux mots qui contiennent la clé (média, diagnostic, spécial…).
+    """
+    if not PRONUNCIATIONS_JSON.exists():
+        return text
+    with PRONUNCIATIONS_JSON.open(encoding="utf-8") as f:
+        table = json.load(f)
+    for key, value in table.items():
+        if key.startswith("_"):  # clés méta (_comment…)
+            continue
+        text = re.sub(rf"\b{re.escape(key)}\b", value, text)  # casse respectée (pas de re.IGNORECASE)
+    return text
+
+
 # ───────────────────────────── 4-5. TTS + CACHE ───────────────────────────
 
 def synthesize_tts(text: str, artefact_id: str, lang: str, *, use_cache: bool) -> Path:
@@ -164,17 +242,54 @@ def synthesize_tts(text: str, artefact_id: str, lang: str, *, use_cache: bool) -
 
 # ───────────────────────────── 6. LECTURE ─────────────────────────────────
 
-def play_audio(mp3_path: Path) -> None:
-    """Joue le mp3 via afplay (macOS). Fallbacks : 'open', puis simple message."""
+def play_audio(mp3_path: Path, *, block: bool = True) -> None:
+    """Joue le mp3 via afplay (macOS). Fallbacks : 'open', puis simple message.
+
+    block=True (défaut, mode --image) : attend la fin de la lecture.
+    block=False (mode --webcam) : lance la lecture sans figer la boucle de capture.
+    """
     if shutil.which("afplay"):
-        subprocess.run(["afplay", str(mp3_path)], check=False)
-    elif shutil.which("open"):  # macOS : ouvre le lecteur par défaut
-        subprocess.run(["open", str(mp3_path)], check=False)
+        runner = subprocess.run if block else subprocess.Popen
+        runner(["afplay", str(mp3_path)], **({"check": False} if block else {}))
+    elif shutil.which("open"):  # macOS : ouvre le lecteur par défaut (non bloquant)
+        subprocess.Popen(["open", str(mp3_path)])
     else:
         print(f"ℹ️  Lecteur audio introuvable. Fichier prêt : {mp3_path}")
 
 
 # ───────────────────────────── ORCHESTRATION ──────────────────────────────
+
+def handle_payload(content: dict, payload: str, lang: str, *,
+                   use_cache: bool, no_tts: bool, play_block: bool = True) -> tuple[str, str] | None:
+    """Chaîne aval commune à --image et --webcam :
+    parsing 'labqr:<id>' -> lookup (langue) -> normalisation -> TTS/cache -> lecture.
+    Renvoie (artefact_id, langue_jouée) si traité, None si rejeté (préfixe/id invalide).
+    """
+    artefact_id = parse_payload(payload)
+    if artefact_id is None:
+        return None
+
+    result = lookup(content, artefact_id, lang)
+    if result is None:
+        return None
+    title, text, used_lang = result
+    print(f"🆔 {artefact_id} | titre : {title} | langue : {used_lang}")
+    print(f"📝 {text}")
+
+    if no_tts:
+        print("⏭️  --no-tts : on s'arrête au texte (pas de synthèse ni lecture).")
+        return artefact_id, used_lang
+
+    # Normalisation prononciation (avant TTS)
+    spoken = normalize_pronunciation(text)
+    if spoken != text:
+        print(f"🗣️  Texte normalisé pour le TTS : {spoken}")
+
+    mp3 = synthesize_tts(spoken, artefact_id, used_lang, use_cache=use_cache)
+    play_audio(mp3, block=play_block)
+    print("✅ Terminé.")
+    return artefact_id, used_lang
+
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Pipeline QR -> audio multilingue (phase 1, local).")
@@ -187,35 +302,21 @@ def main() -> None:
     args = parser.parse_args()
 
     load_dotenv(ENV_PATH)
+    content = load_content()
 
-    # 1. Décodage
-    payload = decode_qr_from_webcam() if args.webcam else decode_qr_from_image(args.image)
+    if args.webcam:
+        run_webcam(content, args.lang, use_cache=not args.no_cache, no_tts=args.no_tts)
+        return
+
+    # Mode --image : décodage unique puis chaîne aval
+    payload = decode_qr_from_image(args.image)
     if not payload:
         print("Aucun QR décodé.")
         sys.exit(1)
     print(f"📷 Payload décodé : '{payload}'")
-
-    # 2. Parsing
-    artefact_id = parse_payload(payload)
-    if artefact_id is None:
+    if handle_payload(content, payload, args.lang,
+                      use_cache=not args.no_cache, no_tts=args.no_tts) is None:
         sys.exit(1)
-
-    # 3. Lookup
-    result = lookup(load_content(), artefact_id, args.lang)
-    if result is None:
-        sys.exit(1)
-    title, text, used_lang = result
-    print(f"🆔 {artefact_id} | titre : {title} | langue : {used_lang}")
-    print(f"📝 {text}")
-
-    if args.no_tts:
-        print("⏭️  --no-tts : on s'arrête au texte (pas de synthèse ni lecture).")
-        return
-
-    # 4-5. TTS + cache, 6. lecture
-    mp3 = synthesize_tts(text, artefact_id, used_lang, use_cache=not args.no_cache)
-    play_audio(mp3)
-    print("✅ Terminé.")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,4 @@
+{
+  "_comment": "Normalisation de prononciation appliquée au texte JUSTE AVANT l'appel ElevenLabs (eleven_multilingual_v2 ne supporte pas le SSML <phoneme>). Remplacement par MOT ENTIER (regex \\bCLE\\b) et SENSIBLE À LA CASSE : seul le terme exact isolé est remplacé, on ne casse pas les mots qui le contiennent. Ajoute ici sigles / marques (ELIO, etc.). Si le rendu ne convient pas, teste d'autres graphies (ex. 'I-A' ou 'I A' au lieu de 'I.A.').",
+  "IA": "I.A."
+}
