@@ -8,6 +8,9 @@ reference/
 *.key
 *.pem
 secrets/
+# Bundle CA exporté du trousseau (Mac corporate) — régénéré par `npm run setup:ca`,
+# jamais versionné.
+.certs/
 
 # --- Python ---
 __pycache__/

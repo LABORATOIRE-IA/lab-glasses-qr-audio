@@ -49,10 +49,22 @@ Source de vérité **unique** (ne pas dupliquer). Chaque clé de premier niveau 
 
 ---
 
+## Mac corporate (CA / TLS) — prérequis
+Sur un Mac d'entreprise, l'interception TLS empêche Node (fetch) de joindre
+ElevenLabs : `unable to get local issuer certificate` (curl marche, Node non, car
+Node n'utilise pas le trousseau système). À faire **une fois par poste** :
+```bash
+npm run setup:ca     # exporte le trousseau → .certs/corp-ca.pem (gitignored)
+```
+Les scripts `dev` et `gen:audio` chargent ensuite automatiquement
+`NODE_EXTRA_CA_CERTS=.certs/corp-ca.pem`. Sans cette étape, toute génération audio
+échoue avec une erreur réseau. Le bundle `.certs/` n'est **jamais** committé.
+
 ## (a) Développement local
 ```bash
 npm install
-npm run dev          # http://localhost:3000  → page visiteur : /play/artefact-01
+npm run setup:ca     # Mac corporate uniquement (voir ci-dessus) — une fois
+npm run dev          # http://localhost:3000  → /play/artefact-01 et /admin
 ```
 
 ## (b) Générer l'audio (LOCAL uniquement)
@@ -65,11 +77,13 @@ ELEVENLABS_MODEL_ID=eleven_multilingual_v2
 ```bash
 # tout (10 ids × 4 langues), saute les mp3 déjà présents :
 npm run gen:audio
-# cibler un id / une langue :
-node --env-file=.env.local scripts/generate-audio.mjs --id artefact-01 --lang fr
+# cibler un id / une langue (--) :
+npm run gen:audio -- --id artefact-01 --lang fr
 # régénérer (ignore l'existant) — ex. après modif de pronunciations.json :
-node --env-file=.env.local scripts/generate-audio.mjs --force
+npm run gen:audio -- --force
 ```
+> La génération peut aussi se déclencher depuis l'admin (`/admin` → Éditer →
+> « Générer l'audio » par langue). Les deux passent par la même logique TTS.
 Sortie : `public/audio/<id>-<lang>.mp3`. **Ces fichiers sont versionnés** (c'est tout
 ce que sert la prod). Normalisation de prononciation appliquée avant l'appel
 (table [`pipeline/pronunciations.json`](pipeline/pronunciations.json), ex. `IA → I.A.`,

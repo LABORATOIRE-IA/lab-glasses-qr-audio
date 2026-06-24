@@ -4,11 +4,12 @@
   "private": true,
   "description": "Agentic Livepoint — web app QR -> page audio multilingue (showroom Lab IA Onepoint)",
   "scripts": {
-    "dev": "next dev",
+    "setup:ca": "node scripts/setup-ca.mjs",
+    "dev": "NODE_EXTRA_CA_CERTS=.certs/corp-ca.pem next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "gen:audio": "node --env-file=.env.local scripts/generate-audio.mjs"
+    "gen:audio": "NODE_EXTRA_CA_CERTS=.certs/corp-ca.pem node --env-file=.env.local scripts/generate-audio.mjs"
   },
   "dependencies": {
     "next": "^15.1.6",
