@@ -10,16 +10,16 @@
   },
   "artefact-01": {
     "title": {
-      "fr": "Bienvenue",
-      "en": "",
-      "es": "",
-      "de": ""
+      "fr": "Bienvenue à l'Agentic Livepoint",
+      "en": "Welcome to the Agentic Livepoint",
+      "es": "Bienvenido al Agentic Livepoint",
+      "de": "Willkommen im Agentic Livepoint"
     },
     "text": {
-      "fr": "Bienvenue à l'Agentic Livepoint, le showroom du Lab IA de Onepoint. Scannez les QR codes pour en savoir plus.",
-      "en": "Welcome to the Agentic Livepoint, the showroom of Onepoint's AI Lab. Scan the QR codes to learn more.",
-      "es": "Bienvenido al Agentic Livepoint, el showroom del Lab de IA de Onepoint. Escanea los códigos QR para saber más.",
-      "de": "Willkommen im Agentic Livepoint, dem Showroom des KI-Labs von Onepoint. Scannen Sie die QR-Codes, um mehr zu erfahren."
+      "fr": "Bienvenue à l'Agentic Livepoint, l'observatoire de l'IA de onepoint. Ce lieu est porté par l'Institut, la brique de recherche et d'innovation du groupe, là où les idées scientifiques deviennent des usages concrets. Autour de vous, des expériences à tester librement : chaque objet sur les étagères porte un code. Regardez-le avec vos lunettes, et il vous raconte son histoire. Suivez le parcours, de la première étagère à la dernière.",
+      "en": "Welcome to the Agentic Livepoint, onepoint's AI observatory. This space is driven by the Institute — the group's research and innovation hub, where scientific ideas turn into real-world uses. All around you, experiences to try freely: every object on the shelves carries a code. Look at it through your glasses, and it tells you its story. Follow the path, from the first shelf to the last.",
+      "es": "Bienvenido al Agentic Livepoint, el observatorio de IA de onepoint. Este espacio está impulsado por el Instituto, el área de investigación e innovación del grupo, donde las ideas científicas se convierten en usos concretos. A tu alrededor, experiencias para probar libremente: cada objeto en las estanterías lleva un código. Míralo con tus gafas y te contará su historia. Sigue el recorrido, de la primera estantería a la última.",
+      "de": "Willkommen im Agentic Livepoint, dem KI-Observatorium von onepoint. Dieser Ort wird vom Institut getragen, der Forschungs- und Innovationseinheit der Gruppe, wo aus wissenschaftlichen Ideen konkrete Anwendungen werden. Rund um Sie herum: Erlebnisse zum freien Ausprobieren. Jedes Objekt in den Regalen trägt einen Code. Schauen Sie ihn mit Ihrer Brille an, und er erzählt Ihnen seine Geschichte. Folgen Sie dem Rundgang, vom ersten Regal bis zum letzten."
     },
     "tts": {
       "voice_id": "21m00Tcm4TlvDq8ikWAM",
@@ -32,16 +32,16 @@
   },
   "artefact-02": {
     "title": {
-      "fr": "Les lunettes Ray-Ban Meta",
-      "en": "",
-      "es": "",
-      "de": ""
+      "fr": "Le musée de l'IA",
+      "en": "The AI museum",
+      "es": "El museo de la IA",
+      "de": "Das KI-Museum"
     },
     "text": {
-      "fr": "Ces lunettes Ray-Ban Meta jouent un audio dans votre langue grâce à leurs haut-parleurs open-ear.",
-      "en": "These Ray-Ban Meta glasses play audio in your language through their open-ear speakers.",
-      "es": "Estas gafas Ray-Ban Meta reproducen audio en tu idioma mediante sus altavoces open-ear.",
-      "de": "Diese Ray-Ban-Meta-Brille spielt Audio in Ihrer Sprache über ihre Open-Ear-Lautsprecher ab."
+      "fr": "Commençons par regarder en arrière. Ce musée réunit les grands succès de l'intelligence artificielle, mais aussi ses promesses oubliées et ses échecs retentissants. Pourquoi ? Parce que dans un marché saturé de annonces, savoir ce qui n'a pas marché vaut autant que suivre la dernière tendance. Prenez un instant pour distinguer ce qui transforme vraiment les usages de ce qui n'était qu'un effet de mode.",
+      "en": "Let's start by looking back. This museum brings together the great successes of artificial intelligence — but also its forgotten promises and its spectacular failures. Why? Because in a market saturated with announcements, knowing what didn't work is worth as much as chasing the latest trend. Take a moment to tell apart what truly transforms the way we work from what was only a passing fad.",
+      "es": "Empecemos mirando atrás. Este museo reúne los grandes éxitos de la inteligencia artificial, pero también sus promesas olvidadas y sus fracasos sonados. ¿Por qué? Porque en un mercado saturado de anuncios, saber lo que no funcionó vale tanto como seguir la última tendencia. Tómate un momento para distinguir lo que de verdad transforma los usos de lo que solo fue una moda pasajera.",
+      "de": "Beginnen wir mit einem Blick zurück. Dieses Museum vereint die großen Erfolge der künstlichen Intelligenz — aber auch ihre vergessenen Versprechen und ihr spektakuläres Scheitern. Warum? Weil es in einem Markt voller Ankündigungen genauso wertvoll ist zu wissen, was nicht funktioniert hat, wie dem neuesten Trend zu folgen. Nehmen Sie sich einen Moment, um zu unterscheiden, was die Anwendungen wirklich verändert — und was nur ein Modephänomen war."
     },
     "tts": {
       "voice_id": "21m00Tcm4TlvDq8ikWAM",
@@ -54,16 +54,16 @@
   },
   "artefact-03": {
     "title": {
-      "fr": "Comment ça marche",
-      "en": "",
-      "es": "",
-      "de": ""
+      "fr": "La visite assistée — Meta Information",
+      "en": "Assisted visit — Meta Information",
+      "es": "Visita asistida — Meta Información",
+      "de": "Begleiteter Rundgang — Meta-Information"
     },
     "text": {
-      "fr": "Chaque QR encode un identifiant. L'application retrouve le texte associé et le lit à voix haute.",
-      "en": "Each QR encodes an identifier. The app looks up the matching text and reads it aloud.",
-      "es": "Cada QR codifica un identificador. La aplicación busca el texto correspondiente y lo lee en voz alta.",
-      "de": "Jeder QR codiert eine Kennung. Die App sucht den passenden Text und liest ihn vor."
+      "fr": "Cette expérience, vous êtes en train de la vivre. Les lunettes que vous portez transforment chaque objet du Lab en source d'information : un regard sur un code, et le contexte s'affiche ou se raconte, sans téléphone ni ordinateur. Imaginez la même chose sur le terrain : un technicien face à une machine, un opérateur face à un équipement, qui obtiennent la bonne information d'un simple regard. C'est ça, l'information augmentée.",
+      "en": "This experience — you're living it right now. The glasses you're wearing turn every object in the Lab into a source of information: a glance at a code, and the context appears or speaks to you, with no phone or computer. Now picture the same thing in the field: a technician facing a machine, an operator facing a piece of equipment, getting the right information at a single glance. That's augmented information.",
+      "es": "Esta experiencia la estás viviendo ahora mismo. Las gafas que llevas convierten cada objeto del Lab en una fuente de información: una mirada a un código y el contexto aparece o te lo cuenta, sin teléfono ni ordenador. Imagina lo mismo sobre el terreno: un técnico ante una máquina, un operario ante un equipo, que obtienen la información correcta con una simple mirada. Eso es la información aumentada.",
+      "de": "Dieses Erlebnis erleben Sie gerade jetzt. Die Brille, die Sie tragen, verwandelt jedes Objekt im Lab in eine Informationsquelle: ein Blick auf einen Code, und der Kontext erscheint oder wird Ihnen erzählt — ganz ohne Telefon oder Computer. Stellen Sie sich dasselbe im Arbeitsalltag vor: ein Techniker vor einer Maschine, ein Mitarbeiter vor einem Gerät, die mit einem einzigen Blick die richtige Information erhalten. Das ist erweiterte Information."
     },
     "tts": {
       "voice_id": "21m00Tcm4TlvDq8ikWAM",
@@ -76,16 +76,16 @@
   },
   "artefact-04": {
     "title": {
-      "fr": "Le Lab IA",
-      "en": "",
-      "es": "",
-      "de": ""
+      "fr": "Projet Astra — l'assistant qui voit le monde",
+      "en": "Project Astra — the assistant that sees the world",
+      "es": "Proyecto Astra — el asistente que ve el mundo",
+      "de": "Projekt Astra — der Assistent, der die Welt sieht"
     },
     "text": {
-      "fr": "Le Lab IA de Onepoint explore les usages concrets de l'intelligence artificielle générative et agentique.",
-      "en": "Onepoint's AI Lab explores concrete uses of generative and agentic artificial intelligence.",
-      "es": "El Lab de IA de Onepoint explora usos concretos de la inteligencia artificial generativa y agéntica.",
-      "de": "Das KI-Lab von Onepoint erforscht konkrete Anwendungen generativer und agentischer KI."
+      "fr": "Restons sur l'idée d'une IA qui regarde le monde avec vous. Prenez la tablette, pointez-la vers un objet et parlez-lui : Astra voit, écoute et raisonne en temps réel. Un voyant rouge sur une machine ? Elle l'identifie et vous dicte les trois gestes à faire, dans l'ordre. Chaque collaborateur devient ainsi son propre premier niveau de support, sans attendre un expert.",
+      "en": "Let's stay with the idea of an AI that looks at the world with you. Pick up the tablet, point it at an object and speak to it: Astra sees, hears and reasons in real time. A red light on a machine? It identifies it and walks you through the three steps to take, in order. Every employee becomes their own first line of support — without waiting for an expert.",
+      "es": "Sigamos con la idea de una IA que mira el mundo contigo. Toma la tableta, apúntala hacia un objeto y háblale: Astra ve, escucha y razona en tiempo real. ¿Una luz roja en una máquina? La identifica y te dicta los tres pasos a seguir, en orden. Así, cada empleado se convierte en su propio primer nivel de soporte, sin esperar a un experto.",
+      "de": "Bleiben wir bei der Idee einer KI, die die Welt mit Ihnen betrachtet. Nehmen Sie das Tablet, richten Sie es auf ein Objekt und sprechen Sie mit ihm: Astra sieht, hört und denkt in Echtzeit. Ein rotes Licht an einer Maschine? Astra erkennt es und nennt Ihnen die drei Schritte, die Sie der Reihe nach tun müssen. So wird jeder Mitarbeiter zu seinem eigenen First-Level-Support — ohne auf einen Experten zu warten."
     },
     "tts": {
       "voice_id": "21m00Tcm4TlvDq8ikWAM",
@@ -98,16 +98,16 @@
   },
   "artefact-05": {
     "title": {
-      "fr": "Audio multilingue",
-      "en": "",
-      "es": "",
-      "de": ""
+      "fr": "Doublage vivant — votre voix dans toutes les langues",
+      "en": "Living dubbing — your voice in every language",
+      "es": "Doblaje vivo — tu voz en todos los idiomas",
+      "de": "Lebendige Synchronisation — Ihre Stimme in allen Sprachen"
     },
     "text": {
-      "fr": "Choisissez votre langue : le même artefact vous parle en français, anglais, espagnol ou allemand.",
-      "en": "Choose your language: the same artefact speaks to you in French, English, Spanish or German.",
-      "es": "Elige tu idioma: el mismo artefacto te habla en francés, inglés, español o alemán.",
-      "de": "Wählen Sie Ihre Sprache: dasselbe Objekt spricht zu Ihnen auf Französisch, Englisch, Spanisch oder Deutsch."
+      "fr": "Et si votre voix pouvait parler une langue que vous ne maîtrisez pas, sans perdre votre émotion ? Dites quelques mots dans le micro : en quelques secondes, vous vous entendez dans une autre langue, avec vos intonations et votre énergie intactes. Pour une organisation internationale, c'est un même message diffusé partout, sans réenregistrer, sans perdre ce qui le rend humain.",
+      "en": "What if your voice could speak a language you don't master, without losing your emotion? Say a few words into the microphone: within seconds, you hear yourself in another language, with your intonation and your energy intact. For an international organization, it's the same message delivered everywhere — no re-recording, without losing what makes it human.",
+      "es": "¿Y si tu voz pudiera hablar un idioma que no dominas, sin perder tu emoción? Di unas palabras al micrófono: en segundos te escuchas en otro idioma, con tus entonaciones y tu energía intactas. Para una organización internacional, es un mismo mensaje difundido en todas partes, sin volver a grabar, sin perder lo que lo hace humano.",
+      "de": "Was wäre, wenn Ihre Stimme eine Sprache sprechen könnte, die Sie nicht beherrschen — ohne ihre Emotion zu verlieren? Sprechen Sie ein paar Worte ins Mikrofon: In wenigen Sekunden hören Sie sich selbst in einer anderen Sprache, mit Ihrer Betonung und Ihrer Energie unverändert. Für eine internationale Organisation bedeutet das: dieselbe Botschaft überall verbreitet, ohne neu aufzunehmen, ohne das zu verlieren, was sie menschlich macht."
     },
     "tts": {
       "voice_id": "21m00Tcm4TlvDq8ikWAM",
@@ -120,16 +120,16 @@
   },
   "artefact-06": {
     "title": {
-      "fr": "Synthèse vocale",
-      "en": "",
-      "es": "",
-      "de": ""
+      "fr": "Razer AVA — l'agent incarné",
+      "en": "Razer AVA — the embodied agent",
+      "es": "Razer AVA — el agente encarnado",
+      "de": "Razer AVA — der verkörperte Agent"
     },
     "text": {
-      "fr": "La voix est générée par synthèse vocale ElevenLabs, pour un rendu naturel dans chaque langue.",
-      "en": "The voice is generated by ElevenLabs text-to-speech, for a natural result in every language.",
-      "es": "La voz se genera con la síntesis de voz de ElevenLabs, para un resultado natural en cada idioma.",
-      "de": "Die Stimme wird per ElevenLabs-Sprachsynthese erzeugt, für ein natürliches Ergebnis in jeder Sprache."
+      "fr": "Voici à quoi pourrait ressembler votre assistant de demain, posé sur le bureau. AVA n'est pas qu'une voix : c'est un agent incarné qui voit, entend et agit en plusieurs étapes. Demandez-lui de planifier une réunion, et il l'ajoute à l'agenda puis vous le rappelle. Sa personnalité s'affine au fil des échanges. L'agent autonome cesse d'être une idée abstraite : il est là, devant vous.",
+      "en": "Here's what your assistant of tomorrow could look like, sitting on your desk. AVA isn't just a voice: it's an embodied agent that sees, hears and acts in several steps. Ask it to schedule a meeting, and it adds it to your calendar and reminds you later. Its personality sharpens with every exchange. The autonomous agent stops being an abstract idea — it's right there, in front of you.",
+      "es": "Así podría ser tu asistente del mañana, sobre el escritorio. AVA no es solo una voz: es un agente encarnado que ve, escucha y actúa en varios pasos. Pídele que organice una reunión y la añade a la agenda y luego te la recuerda. Su personalidad se afina con cada intercambio. El agente autónomo deja de ser una idea abstracta: está aquí, frente a ti.",
+      "de": "So könnte Ihr Assistent von morgen aussehen — auf dem Schreibtisch. AVA ist nicht nur eine Stimme: Es ist ein verkörperter Agent, der sieht, hört und in mehreren Schritten handelt. Bitten Sie ihn, ein Meeting zu planen, und er trägt es in den Kalender ein und erinnert Sie später daran. Seine Persönlichkeit schärft sich mit jedem Austausch. Der autonome Agent ist keine abstrakte Idee mehr — er steht direkt vor Ihnen."
     },
     "tts": {
       "voice_id": "21m00Tcm4TlvDq8ikWAM",
@@ -142,16 +142,16 @@
   },
   "artefact-07": {
     "title": {
-      "fr": "Vision par ordinateur",
-      "en": "",
-      "es": "",
-      "de": ""
+      "fr": "World Models — toucher la prochaine rupture",
+      "en": "World Models — touching the next breakthrough",
+      "es": "World Models — toca la próxima ruptura",
+      "de": "World Models — den nächsten Umbruch greifen"
     },
     "text": {
-      "fr": "La caméra des lunettes lit le QR code ; à l'avenir, elle pourra aussi reconnaître les objets eux-mêmes.",
-      "en": "The glasses' camera reads the QR code; in the future, it could also recognise the objects themselves.",
-      "es": "La cámara de las gafas lee el código QR; en el futuro, podría reconocer también los propios objetos.",
-      "de": "Die Kamera der Brille liest den QR-Code; künftig könnte sie auch die Objekte selbst erkennen."
+      "fr": "Mettez le casque, et entrez dans un monde qui se construit en temps réel. Ici, l'IA générative et la réalité mixte vous laissent explorer un environnement, tester un scénario, modifier un choix et en voir aussitôt les conséquences. C'est tester une idée avant d'y consacrer du temps et de l'argent : réduire le coût de l'erreur en l'expérimentant d'abord, virtuellement.",
+      "en": "Put on the headset and step into a world that builds itself in real time. Here, generative AI and mixed reality let you explore an environment, test a scenario, change a choice and instantly see its consequences. It's testing an idea before spending time and money on it: lowering the cost of mistakes by experiencing them first, virtually.",
+      "es": "Ponte el casco y entra en un mundo que se construye en tiempo real. Aquí, la IA generativa y la realidad mixta te permiten explorar un entorno, probar un escenario, cambiar una decisión y ver al instante sus consecuencias. Es probar una idea antes de dedicarle tiempo y dinero: reducir el coste del error experimentándolo primero, de forma virtual.",
+      "de": "Setzen Sie das Headset auf und betreten Sie eine Welt, die sich in Echtzeit aufbaut. Hier lassen Sie generative KI und Mixed Reality eine Umgebung erkunden, ein Szenario testen, eine Entscheidung ändern und sofort deren Folgen sehen. Es bedeutet, eine Idee zu testen, bevor man Zeit und Geld investiert: die Kosten von Fehlern senken, indem man sie zuerst virtuell erlebt."
     },
     "tts": {
       "voice_id": "21m00Tcm4TlvDq8ikWAM",
@@ -164,60 +164,16 @@
   },
   "artefact-08": {
     "title": {
-      "fr": "Sans les mains",
-      "en": "",
-      "es": "",
-      "de": ""
+      "fr": "Digital Afterlife — la frontière éthique",
+      "en": "Digital Afterlife — the ethical frontier",
+      "es": "Digital Afterlife — la frontera ética",
+      "de": "Digital Afterlife — die ethische Grenze"
     },
     "text": {
-      "fr": "Tout se passe sans écran ni manipulation : vous regardez, vous écoutez, vous avancez.",
-      "en": "Everything happens with no screen and no handling: you look, you listen, you move on.",
-      "es": "Todo ocurre sin pantalla ni manipulación: miras, escuchas y sigues adelante.",
-      "de": "Alles geschieht ohne Bildschirm und ohne Hantieren: Sie schauen, Sie hören, Sie gehen weiter."
-    },
-    "tts": {
-      "voice_id": "21m00Tcm4TlvDq8ikWAM",
-      "model_id": "eleven_multilingual_v2",
-      "voice_settings": {
-        "stability": 0.5,
-        "similarity_boost": 0.75
-      }
-    }
-  },
-  "artefact-09": {
-    "title": {
-      "fr": "Confidentialité",
-      "en": "",
-      "es": "",
-      "de": ""
-    },
-    "text": {
-      "fr": "Aucune donnée personnelle n'est nécessaire pour écouter les contenus de la visite.",
-      "en": "No personal data is required to listen to the tour's content.",
-      "es": "No se necesita ningún dato personal para escuchar los contenidos de la visita.",
-      "de": "Für das Anhören der Tour-Inhalte sind keine personenbezogenen Daten erforderlich."
-    },
-    "tts": {
-      "voice_id": "21m00Tcm4TlvDq8ikWAM",
-      "model_id": "eleven_multilingual_v2",
-      "voice_settings": {
-        "stability": 0.5,
-        "similarity_boost": 0.75
-      }
-    }
-  },
-  "artefact-10": {
-    "title": {
-      "fr": "Merci",
-      "en": "",
-      "es": "",
-      "de": ""
-    },
-    "text": {
-      "fr": "Merci de votre visite à l'Agentic Livepoint. À bientôt au Lab IA de Onepoint !",
-      "en": "Thank you for visiting the Agentic Livepoint. See you soon at Onepoint's AI Lab!",
-      "es": "Gracias por tu visita al Agentic Livepoint. ¡Hasta pronto en el Lab de IA de Onepoint!",
-      "de": "Danke für Ihren Besuch im Agentic Livepoint. Bis bald im KI-Lab von Onepoint!"
+      "fr": "Pour finir, une expérience qui dérange, et c'est volontaire. En Chine, des services recréent des avatars interactifs de personnes disparues à partir de quelques photos et messages. La technique fonctionne — et c'est précisément ce qui pose question. Consentement, identité numérique, propriété des données : cette étagère n'apporte pas de réponse, elle ouvre le débat. Car savoir ce que l'IA peut faire ne dit pas ce qu'elle devrait faire.",
+      "en": "To finish, an experience that unsettles — and that's intentional. In China, services recreate interactive avatars of people who have passed away, from just a few photos and messages. The technique works — and that's exactly what raises the question. Consent, digital identity, data ownership: this shelf offers no answer, it opens the debate. Because knowing what AI can do doesn't tell us what it should do.",
+      "es": "Para terminar, una experiencia que incomoda, y es deliberado. En China, algunos servicios recrean avatares interactivos de personas fallecidas a partir de unas pocas fotos y mensajes. La técnica funciona, y eso es precisamente lo que plantea la pregunta. Consentimiento, identidad digital, propiedad de los datos: esta estantería no da una respuesta, abre el debate. Porque saber lo que la IA puede hacer no nos dice lo que debería hacer.",
+      "de": "Zum Abschluss ein Erlebnis, das verstört — und das ist Absicht. In China erstellen Dienste interaktive Avatare verstorbener Menschen aus nur wenigen Fotos und Nachrichten. Die Technik funktioniert — und genau das wirft die Frage auf. Einwilligung, digitale Identität, Eigentum an den Daten: Dieses Regal liefert keine Antwort, es eröffnet die Debatte. Denn zu wissen, was KI kann, sagt uns nicht, was sie tun sollte."
     },
     "tts": {
       "voice_id": "21m00Tcm4TlvDq8ikWAM",
