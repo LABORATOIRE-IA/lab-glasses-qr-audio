@@ -1,5 +1,15 @@
 import type { Metadata, Viewport } from "next";
+import { Poppins } from "next/font/google";
 import "./globals.css";
+
+// Poppins (charte Onepoint), self-hosted par next/font : téléchargé au build et servi
+// depuis notre domaine, exposé en variable CSS --font-poppins (cf. tailwind fontFamily.sans).
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-poppins",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Agentic Livepoint — Audio",
@@ -20,8 +30,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fr">
-      <body className="min-h-screen bg-neutral-50 text-neutral-900 antialiased">
+    <html lang="fr" className={poppins.variable}>
+      <body className="min-h-screen bg-neutral-50 font-sans text-neutral-900 antialiased">
         {children}
       </body>
     </html>

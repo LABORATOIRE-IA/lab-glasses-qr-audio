@@ -1,15 +1,22 @@
-// Landing minimale. Le vrai point d'entrée est /play/<id> (atteint via QR code).
+// Accueil "/" — galerie de la visite guidée (Server Component).
+// Lit content.json (ordre d'insertion = artefact-01..10) + la présence des mp3,
+// puis délègue le rendu (QR live, bannière BASE_URL) au composant client Gallery.
+
+import { allIds, getEntry } from "@/lib/content";
+import { langsWithAudio } from "@/lib/audio";
+import { DEFAULT_LANG } from "@/lib/schema";
+import Gallery, { type GalleryItem } from "./Gallery";
+
 export default function Home() {
-  return (
-    <main className="mx-auto flex min-h-screen max-w-md flex-col items-center justify-center gap-4 p-6 text-center">
-      <p className="text-xs uppercase tracking-widest text-neutral-400">
-        Agentic Livepoint
-      </p>
-      <h1 className="text-2xl font-semibold">Lab IA — Onepoint</h1>
-      <p className="text-neutral-600">
-        Scannez un QR code de la visite pour écouter l&apos;explication dans
-        votre langue.
-      </p>
-    </main>
-  );
+  const items: GalleryItem[] = allIds().map((id, i) => {
+    const entry = getEntry(id);
+    return {
+      id,
+      n: i + 1,
+      title: entry?.title?.[DEFAULT_LANG] ?? "",
+      audioLangs: langsWithAudio(id),
+    };
+  });
+
+  return <Gallery items={items} />;
 }
