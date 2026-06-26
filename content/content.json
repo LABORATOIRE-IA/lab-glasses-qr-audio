@@ -23,7 +23,7 @@
     },
     "tts": {
       "voice_id": "21m00Tcm4TlvDq8ikWAM",
-      "model_id": "eleven_multilingual_v2",
+      "model_id": "eleven_v3",
       "voice_settings": {
         "stability": 0.5,
         "similarity_boost": 0.75
@@ -38,14 +38,14 @@
       "de": "Das KI-Museum"
     },
     "text": {
-      "fr": "Commençons par regarder en arrière. Ce musée réunit les grands succès de l'intelligence artificielle, mais aussi ses promesses oubliées et ses échecs retentissants. Pourquoi ? Parce que dans un marché saturé de annonces, savoir ce qui n'a pas marché vaut autant que suivre la dernière tendance. Prenez un instant pour distinguer ce qui transforme vraiment les usages de ce qui n'était qu'un effet de mode.",
+      "fr": "Commençons par regarder en arrière. Ce musée réunit les grands succès de l'intelligence artificielle, mais aussi ses promesses oubliées et ses échecs retentissants. Pourquoi ? Parce que dans un marché saturé d'annonces, savoir ce qui n'a pas marché vaut autant que suivre la dernière tendance. Prenez un instant pour distinguer ce qui transforme vraiment les usages de ce qui n'était qu'un effet de mode.",
       "en": "Let's start by looking back. This museum brings together the great successes of artificial intelligence — but also its forgotten promises and its spectacular failures. Why? Because in a market saturated with announcements, knowing what didn't work is worth as much as chasing the latest trend. Take a moment to tell apart what truly transforms the way we work from what was only a passing fad.",
       "es": "Empecemos mirando atrás. Este museo reúne los grandes éxitos de la inteligencia artificial, pero también sus promesas olvidadas y sus fracasos sonados. ¿Por qué? Porque en un mercado saturado de anuncios, saber lo que no funcionó vale tanto como seguir la última tendencia. Tómate un momento para distinguir lo que de verdad transforma los usos de lo que solo fue una moda pasajera.",
       "de": "Beginnen wir mit einem Blick zurück. Dieses Museum vereint die großen Erfolge der künstlichen Intelligenz — aber auch ihre vergessenen Versprechen und ihr spektakuläres Scheitern. Warum? Weil es in einem Markt voller Ankündigungen genauso wertvoll ist zu wissen, was nicht funktioniert hat, wie dem neuesten Trend zu folgen. Nehmen Sie sich einen Moment, um zu unterscheiden, was die Anwendungen wirklich verändert — und was nur ein Modephänomen war."
     },
     "tts": {
       "voice_id": "21m00Tcm4TlvDq8ikWAM",
-      "model_id": "eleven_multilingual_v2",
+      "model_id": "eleven_v3",
       "voice_settings": {
         "stability": 0.5,
         "similarity_boost": 0.75
@@ -67,7 +67,7 @@
     },
     "tts": {
       "voice_id": "21m00Tcm4TlvDq8ikWAM",
-      "model_id": "eleven_multilingual_v2",
+      "model_id": "eleven_v3",
       "voice_settings": {
         "stability": 0.5,
         "similarity_boost": 0.75
@@ -89,7 +89,7 @@
     },
     "tts": {
       "voice_id": "21m00Tcm4TlvDq8ikWAM",
-      "model_id": "eleven_multilingual_v2",
+      "model_id": "eleven_v3",
       "voice_settings": {
         "stability": 0.5,
         "similarity_boost": 0.75
@@ -111,7 +111,7 @@
     },
     "tts": {
       "voice_id": "21m00Tcm4TlvDq8ikWAM",
-      "model_id": "eleven_multilingual_v2",
+      "model_id": "eleven_v3",
       "voice_settings": {
         "stability": 0.5,
         "similarity_boost": 0.75
@@ -133,7 +133,7 @@
     },
     "tts": {
       "voice_id": "21m00Tcm4TlvDq8ikWAM",
-      "model_id": "eleven_multilingual_v2",
+      "model_id": "eleven_v3",
       "voice_settings": {
         "stability": 0.5,
         "similarity_boost": 0.75
@@ -155,7 +155,7 @@
     },
     "tts": {
       "voice_id": "21m00Tcm4TlvDq8ikWAM",
-      "model_id": "eleven_multilingual_v2",
+      "model_id": "eleven_v3",
       "voice_settings": {
         "stability": 0.5,
         "similarity_boost": 0.75
@@ -177,7 +177,7 @@
     },
     "tts": {
       "voice_id": "21m00Tcm4TlvDq8ikWAM",
-      "model_id": "eleven_multilingual_v2",
+      "model_id": "eleven_v3",
       "voice_settings": {
         "stability": 0.5,
         "similarity_boost": 0.75

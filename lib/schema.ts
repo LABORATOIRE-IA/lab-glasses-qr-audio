@@ -29,7 +29,10 @@ export interface Entry {
 /** Défauts TTS (voice_id repris de pipeline/.env ; non secret). Stocké, pas appelé ici. */
 export const DEFAULT_TTS: Tts = {
   voice_id: "21m00Tcm4TlvDq8ikWAM",
-  model_id: "eleven_multilingual_v2",
+  // Eleven v3 (expressif, multilingue) — même endpoint text-to-speech que v2.
+  // stability v3 = 3 réglages : 0.0 Creative / 0.5 Natural / 1.0 Robust.
+  // 0.5 (Natural) + similarity_boost 0.75 = défauts recommandés, valides en v3.
+  model_id: "eleven_v3",
   voice_settings: { stability: 0.5, similarity_boost: 0.75 },
 };
 

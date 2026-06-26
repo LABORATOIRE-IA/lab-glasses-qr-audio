@@ -5,7 +5,8 @@
 // /api/admin/tts (clé serveur uniquement). Pas de QR ici, pas de « tout générer ».
 
 import { useCallback, useEffect, useState } from "react";
-import QRCode from "qrcode";
+import QrCode from "@/components/QrCode";
+import { useBaseUrl } from "@/lib/useBaseUrl";
 import {
   LANGS,
   DEFAULT_LANG,
@@ -128,11 +129,7 @@ export default function AdminClient() {
   }, []);
 
   // BASE_URL des QR : NEXT_PUBLIC_BASE_URL (prod) sinon l'origine courante (localhost).
-  const envBase = process.env.NEXT_PUBLIC_BASE_URL?.trim();
-  const [origin, setOrigin] = useState("");
-  useEffect(() => setOrigin(window.location.origin), []);
-  const baseUrl = envBase || origin;
-  const baseConfigured = !!envBase;
+  const { baseUrl, baseConfigured, origin } = useBaseUrl();
 
   return (
     <main className="mx-auto max-w-5xl p-6">
@@ -242,7 +239,7 @@ export default function AdminClient() {
                 </td>
                 {/* QR live (client-side) + download PNG */}
                 <td className="py-2">
-                  <QrCell id={id} baseUrl={baseUrl} />
+                  <QrCode id={id} baseUrl={baseUrl} size={72} />
                 </td>
                 <td className="py-2 text-right whitespace-nowrap">
                   <button
@@ -284,77 +281,6 @@ export default function AdminClient() {
   );
 }
 
-// ───────────────────────────── QR (client-side) ─────────────────────────────
-
-// Encode <BASE_URL>/play/<id> (une PAGE, jamais un mp3), niveau de correction H.
-// Aperçu live + export PNG haute résolution (~820px, fort contraste) pour l'impression.
-// Cohérent avec qr-codes/generate_qr.py (même URL cible, même niveau H).
-function qrUrl(baseUrl: string, id: string): string {
-  return baseUrl ? `${baseUrl.replace(/\/+$/, "")}/play/${id}` : "";
-}
-
-function QrCell({ id, baseUrl }: { id: string; baseUrl: string }) {
-  const url = qrUrl(baseUrl, id);
-  const [preview, setPreview] = useState("");
-
-  useEffect(() => {
-    if (!url) {
-      setPreview("");
-      return;
-    }
-    let alive = true;
-    QRCode.toDataURL(url, { errorCorrectionLevel: "H", margin: 2, width: 96 })
-      .then((d) => alive && setPreview(d))
-      .catch(() => alive && setPreview(""));
-    return () => {
-      alive = false;
-    };
-  }, [url]);
-
-  async function download() {
-    if (!url) return;
-    // Haute résolution pour l'impression : ~820px, niveau H, noir/blanc plein contraste.
-    const dataUrl = await QRCode.toDataURL(url, {
-      errorCorrectionLevel: "H",
-      margin: 4,
-      width: 820,
-      color: { dark: "#000000", light: "#ffffff" },
-    });
-    const a = document.createElement("a");
-    a.href = dataUrl;
-    a.download = `${id}.png`; // nommage déterministe
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-  }
-
-  return (
-    <div className="flex flex-col items-center gap-1">
-      {preview ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={preview}
-          alt={`QR ${id}`}
-          width={72}
-          height={72}
-          title={url}
-          className="rounded border border-neutral-200"
-        />
-      ) : (
-        <span className="text-xs text-neutral-300">…</span>
-      )}
-      <button
-        type="button"
-        onClick={download}
-        disabled={!url}
-        className="text-xs font-medium text-neutral-700 underline disabled:opacity-40"
-      >
-        Télécharger PNG
-      </button>
-    </div>
-  );
-}
-
 // ───────────────────────────── Éditeur ─────────────────────────────
 
 type GenStatus = "idle" | "loading" | "ok" | "err";
@@ -380,6 +306,17 @@ function Editor({
   const [gen, setGen] = useState<Record<string, { status: GenStatus; msg?: string }>>(
     {},
   );
+  // État de la génération groupée « langues manquantes » (par expérience).
+  const [bulk, setBulk] = useState<{
+    running: boolean;
+    current: Lang | null;
+    done: number;
+    total: number;
+    generated: number;
+    already: number;
+    errors: { lang: Lang; msg: string }[];
+    ran: boolean;
+  } | null>(null);
 
   const setId = (v: string) => onChange({ ...state, id: v });
   const setTitle = (lang: Lang, v: string) =>
@@ -400,7 +337,10 @@ function Editor({
       },
     });
 
-  async function generate(lang: Lang, force: boolean) {
+  async function generate(
+    lang: Lang,
+    force: boolean,
+  ): Promise<{ ok: boolean; status?: string; error?: string }> {
     setGen((g) => ({ ...g, [lang]: { status: "loading" } }));
     try {
       const res = await fetch("/api/admin/tts", {
@@ -414,9 +354,48 @@ function Editor({
       }
       setGen((g) => ({ ...g, [lang]: { status: "ok", msg: data.status } }));
       onGenerated(id, lang);
+      return { ok: true, status: data.status };
     } catch (e) {
-      setGen((g) => ({ ...g, [lang]: { status: "err", msg: (e as Error).message } }));
+      const error = (e as Error).message;
+      setGen((g) => ({ ...g, [lang]: { status: "err", msg: error } }));
+      return { ok: false, error };
     }
+  }
+
+  // Langues dont le TEXTE existe mais dont le mp3 manque encore (cible du « manquantes »).
+  const hasText = (l: Lang) => (draft.text[l] ?? "").trim() !== "";
+  const textLangs = LANGS.filter(hasText);
+  const missingLangs = textLangs.filter((l) => !audio[audioKey(id, l)]);
+
+  // Génère séquentiellement les langues manquantes (saute le cache, prodGuard 403 géré
+  // par la route). Réutilise /api/admin/tts via generate(). Pas de « tout générer global ».
+  async function generateMissing() {
+    const targets = missingLangs;
+    const already = textLangs.length - targets.length;
+    setBulk({
+      running: true,
+      current: null,
+      done: 0,
+      total: targets.length,
+      generated: 0,
+      already,
+      errors: [],
+      ran: true,
+    });
+    let generated = 0;
+    const errors: { lang: Lang; msg: string }[] = [];
+    for (const l of targets) {
+      setBulk((b) => (b ? { ...b, current: l } : b));
+      const r = await generate(l, false);
+      if (r.ok) generated++;
+      else errors.push({ lang: l, msg: r.error ?? "erreur" });
+      setBulk((b) =>
+        b ? { ...b, done: b.done + 1, generated, errors } : b,
+      );
+    }
+    setBulk((b) =>
+      b ? { ...b, running: false, current: null, generated, errors } : b,
+    );
   }
 
   function GenControls({ lang }: { lang: Lang }) {
@@ -480,6 +459,60 @@ function Editor({
           La génération audio utilise le texte <strong>enregistré</strong> — enregistre
           tes modifications avant de générer.
         </p>
+
+        {/* Génération groupée : les langues manquantes de CETTE expérience */}
+        <div className="mb-4 rounded-lg border border-neutral-200 bg-neutral-50 p-3">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <p className="text-sm font-semibold">Audio — langues manquantes</p>
+              <p className="text-xs text-neutral-500">
+                Génère les mp3 absents pour chaque langue dont le texte existe (saute
+                celles déjà en cache).
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={generateMissing}
+              disabled={isNew || bulk?.running || missingLangs.length === 0}
+              className="rounded bg-neutral-900 px-3 py-2 text-sm font-semibold text-white disabled:opacity-40"
+            >
+              {bulk?.running
+                ? "Génération…"
+                : missingLangs.length === 0
+                  ? "Tout est généré"
+                  : `Générer les langues manquantes (${missingLangs.length})`}
+            </button>
+          </div>
+
+          {isNew && (
+            <p className="mt-2 text-xs text-neutral-400">
+              Enregistre l&apos;expérience avant de générer.
+            </p>
+          )}
+
+          {/* Progression langue par langue */}
+          {bulk?.running && (
+            <p className="mt-2 text-xs text-neutral-600">
+              {bulk.current ? `Langue ${LANG_LABEL[bulk.current]} — ` : ""}
+              {bulk.done}/{bulk.total}…
+            </p>
+          )}
+
+          {/* Récap */}
+          {bulk && !bulk.running && bulk.ran && (
+            <div className="mt-2 text-xs">
+              <p className="font-medium text-neutral-700">
+                {bulk.generated} générée(s) · {bulk.already} déjà présente(s) ·{" "}
+                {bulk.errors.length} erreur(s)
+              </p>
+              {bulk.errors.map((e) => (
+                <p key={e.lang} className="text-red-600">
+                  {LANG_LABEL[e.lang]} : {e.msg}
+                </p>
+              ))}
+            </div>
+          )}
+        </div>
 
         {/* id */}
         <label className="mb-4 block">

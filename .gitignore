@@ -49,3 +49,7 @@ next-env.d.ts
 *.xcuserstate
 DerivedData/
 *.xcworkspace/xcuserdata/
+.vercel
+
+# --- Claude Code (config locale machine + skills locaux) ---
+.claude/
