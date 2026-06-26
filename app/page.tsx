@@ -4,7 +4,7 @@
 
 import { allIds, getEntry } from "@/lib/content";
 import { langsWithAudio } from "@/lib/audio";
-import { DEFAULT_LANG } from "@/lib/schema";
+import { DEFAULT_LANG, DEFAULT_CATEGORY } from "@/lib/schema";
 import Gallery, { type GalleryItem } from "./Gallery";
 
 export default function Home() {
@@ -15,6 +15,7 @@ export default function Home() {
       n: i + 1,
       title: entry?.title?.[DEFAULT_LANG] ?? "",
       audioLangs: langsWithAudio(id),
+      category: entry?.category ?? DEFAULT_CATEGORY,
     };
   });
 

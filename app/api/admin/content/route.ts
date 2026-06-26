@@ -9,7 +9,13 @@
 import { NextResponse } from "next/server";
 import { readFile, writeFile, rename } from "node:fs/promises";
 import { join } from "node:path";
-import { isValidSlug, DEFAULT_TTS, type Entry } from "@/lib/schema";
+import {
+  isValidSlug,
+  DEFAULT_TTS,
+  DEFAULT_CATEGORY,
+  type Category,
+  type Entry,
+} from "@/lib/schema";
 
 const CONTENT_PATH = join(process.cwd(), "content", "content.json");
 const LANGS = ["fr", "en", "es", "de"] as const;
@@ -55,7 +61,12 @@ function sanitizeEntry(input: unknown): Entry {
   };
   const tts = (o.tts ?? {}) as Record<string, unknown>;
   const vs = (tts.voice_settings ?? {}) as Record<string, unknown>;
+  const category: Category =
+    o.category === "livre_blanc" || o.category === "experience"
+      ? o.category
+      : DEFAULT_CATEGORY;
   return {
+    category,
     title: pickLangs(o.title),
     text: pickLangs(o.text),
     tts: {

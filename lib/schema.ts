@@ -19,8 +19,14 @@ export interface Tts {
   voice_settings: TtsVoiceSettings;
 }
 
+/** Section de la galerie. "experience" = visite guidée ; "livre_blanc" = livres
+ *  blancs de l'Institut. Champ optionnel sur l'entrée (défaut DEFAULT_CATEGORY). */
+export type Category = "experience" | "livre_blanc";
+export const DEFAULT_CATEGORY: Category = "experience";
+
 /** Une entrée artefact (nouveau schéma) : titre + texte par langue + réglages TTS. */
 export interface Entry {
+  category?: Category;
   title: Record<string, string>;
   text: Record<string, string>;
   tts: Tts;
@@ -47,6 +53,7 @@ export function isValidSlug(s: string): boolean {
 /** Entrée vide conforme au schéma (pour le formulaire « Ajouter »). */
 export function emptyEntry(): Entry {
   return {
+    category: DEFAULT_CATEGORY,
     title: { fr: "", en: "", es: "", de: "" },
     text: { fr: "", en: "", es: "", de: "" },
     tts: {

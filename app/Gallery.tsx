@@ -11,15 +11,32 @@ import QRCode from "qrcode";
 import QrCode, { qrTargetUrl } from "@/components/QrCode";
 import OnepointLogo from "@/components/OnepointLogo";
 import { useBaseUrl } from "@/lib/useBaseUrl";
-import { LANGS, type Lang } from "@/lib/schema";
+import { LANGS, DEFAULT_CATEGORY, type Lang, type Category } from "@/lib/schema";
 
 const LANG_LABEL: Record<Lang, string> = { fr: "FR", en: "EN", es: "ES", de: "DE" };
+
+// Sections de la galerie, dans l'ordre d'affichage. L'appartenance est déterminée
+// par le champ `category` de chaque entrée (content.json) — pas par un numéro codé
+// en dur. Une section sans aucune carte n'est pas rendue (cf. plus bas).
+const SECTIONS: { category: Category; title: string; subtitle?: string }[] = [
+  {
+    category: "experience",
+    title: "La visite guidée",
+    subtitle: "Les expériences à tester, de la première étagère à la dernière.",
+  },
+  {
+    category: "livre_blanc",
+    title: "Les livres blancs de l'Institut",
+    subtitle: "Les études de l'Institut Onepoint, à écouter comme un audioguide.",
+  },
+];
 
 export type GalleryItem = {
   id: string;
   n: number;
   title: string;
   audioLangs: Lang[];
+  category: Category;
 };
 
 export default function Gallery({ items }: { items: GalleryItem[] }) {
@@ -47,7 +64,7 @@ export default function Gallery({ items }: { items: GalleryItem[] }) {
             Lab IA
           </span>
         </div>
-        <h1 className="mt-5 text-4xl font-semibold tracking-tight">Visite guidée</h1>
+        <h1 className="mt-5 text-4xl font-semibold tracking-tight">Agentic Livepoint</h1>
         {/* Accent de signature — un seul, discret */}
         <div className="mx-auto mt-4 h-1 w-16 rounded-full bg-gradient-to-r from-brand-teal to-brand-blue" />
         <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-neutral-500">
@@ -67,62 +84,35 @@ export default function Gallery({ items }: { items: GalleryItem[] }) {
         </p>
       )}
 
-      <ul className="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3">
-        {items.map((item) => (
-          <li
-            key={item.id}
-            className="flex flex-col rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)]"
-          >
-            {/* En-tête cartel : numéro de parcours + titre */}
-            <div className="mb-6 flex items-start gap-4">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-neutral-900 text-base font-semibold text-white tabular-nums">
-                {item.n}
-              </span>
-              <div className="min-w-0 pt-0.5">
-                <h2 className="truncate text-lg font-semibold leading-tight">
-                  {item.title || <span className="text-neutral-400">Sans titre</span>}
-                </h2>
-                <p className="mt-0.5 font-mono text-xs text-neutral-400">{item.id}</p>
-              </div>
+      {/* Deux sections distinctes (visite guidée / livres blancs), groupées par
+          `category`. Une section sans carte n'est pas rendue. */}
+      {SECTIONS.map((section) => {
+        const sectionItems = items.filter(
+          (it) => (it.category ?? DEFAULT_CATEGORY) === section.category,
+        );
+        if (sectionItems.length === 0) return null;
+        return (
+          <section key={section.category} className="mb-14 last:mb-0">
+            <div className="mb-7">
+              <h2 className="text-2xl font-semibold tracking-tight">{section.title}</h2>
+              {section.subtitle && (
+                <p className="mt-1 text-sm text-neutral-500">{section.subtitle}</p>
+              )}
+              <div className="mt-4 h-px w-full bg-neutral-100" />
             </div>
-
-            {/* QR live (cliquable → lightbox) + download */}
-            <div className="flex justify-center">
-              <QrCode
-                id={item.id}
-                baseUrl={baseUrl}
-                size={172}
-                onZoom={(trigger) => openLightbox(item, trigger)}
-              />
-            </div>
-
-            {/* Badges des langues dont l'audio existe */}
-            <div className="mt-6 border-t border-neutral-100 pt-4">
-              <p className="mb-2.5 text-center text-[11px] uppercase tracking-wider text-neutral-400">
-                Audio disponible
-              </p>
-              <div className="flex justify-center gap-1.5">
-                {LANGS.map((l) => {
-                  const has = item.audioLangs.includes(l);
-                  return (
-                    <span
-                      key={l}
-                      title={`${LANG_LABEL[l]} : audio ${has ? "disponible" : "manquant"}`}
-                      className={`rounded-md px-2.5 py-1 text-xs font-semibold ${
-                        has
-                          ? "bg-brand-teal/10 text-brand-teal ring-1 ring-brand-teal/20"
-                          : "bg-neutral-100 text-neutral-300"
-                      }`}
-                    >
-                      {LANG_LABEL[l]}
-                    </span>
-                  );
-                })}
-              </div>
-            </div>
-          </li>
-        ))}
-      </ul>
+            <ul className="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3">
+              {sectionItems.map((item) => (
+                <GalleryCard
+                  key={item.id}
+                  item={item}
+                  baseUrl={baseUrl}
+                  onZoom={(trigger) => openLightbox(item, trigger)}
+                />
+              ))}
+            </ul>
+          </section>
+        );
+      })}
 
       {/* Lien admin discret (403 attendu en prod) */}
       <footer className="mt-14 text-center">
@@ -138,6 +128,78 @@ export default function Gallery({ items }: { items: GalleryItem[] }) {
         <QrLightbox item={active} baseUrl={baseUrl} onClose={closeLightbox} />
       )}
     </main>
+  );
+}
+
+// ───────────────────────────── Carte galerie ─────────────────────────────
+
+// Carte cartel de musée : numéro + titre + QR (cliquable → lightbox) + badges
+// langues + CTA « ▶ Écouter ». Logique inchangée — extraite pour rendre les
+// sections lisibles. `onZoom` reçoit l'élément déclencheur (restaure le focus).
+function GalleryCard({
+  item,
+  baseUrl,
+  onZoom,
+}: {
+  item: GalleryItem;
+  baseUrl: string;
+  onZoom: (trigger: HTMLElement) => void;
+}) {
+  return (
+    <li className="flex flex-col rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)]">
+      {/* En-tête cartel : numéro de parcours + titre */}
+      <div className="mb-6 flex items-start gap-4">
+        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-neutral-900 text-base font-semibold text-white tabular-nums">
+          {item.n}
+        </span>
+        <div className="min-w-0 pt-0.5">
+          <h3 className="truncate text-lg font-semibold leading-tight">
+            {item.title || <span className="text-neutral-400">Sans titre</span>}
+          </h3>
+          <p className="mt-0.5 font-mono text-xs text-neutral-400">{item.id}</p>
+        </div>
+      </div>
+
+      {/* QR live (cliquable → lightbox) + download */}
+      <div className="flex justify-center">
+        <QrCode id={item.id} baseUrl={baseUrl} size={172} onZoom={onZoom} />
+      </div>
+
+      {/* Badges des langues dont l'audio existe */}
+      <div className="mt-6 border-t border-neutral-100 pt-4">
+        <p className="mb-2.5 text-center text-[11px] uppercase tracking-wider text-neutral-400">
+          Audio disponible
+        </p>
+        <div className="flex justify-center gap-1.5">
+          {LANGS.map((l) => {
+            const has = item.audioLangs.includes(l);
+            return (
+              <span
+                key={l}
+                title={`${LANG_LABEL[l]} : audio ${has ? "disponible" : "manquant"}`}
+                className={`rounded-md px-2.5 py-1 text-xs font-semibold ${
+                  has
+                    ? "bg-brand-teal/10 text-brand-teal ring-1 ring-brand-teal/20"
+                    : "bg-neutral-100 text-neutral-300"
+                }`}
+              >
+                {LANG_LABEL[l]}
+              </span>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* CTA direct : ouvre /play/<id> (même cible qu'un scan QR) sans scanner.
+          Complément du QR — navigation normale, même onglet ; la page play gère
+          l'autoplay + le choix de langue. */}
+      <Link
+        href={`/play/${item.id}`}
+        className="mt-5 flex items-center justify-center gap-2 rounded-full bg-brand-blue px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-blue/90 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue/40"
+      >
+        ▶ Écouter
+      </Link>
+    </li>
   );
 }
 

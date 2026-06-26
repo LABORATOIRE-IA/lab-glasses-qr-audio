@@ -4,11 +4,13 @@
     "entry": {
       "title": "Titre par langue { fr, en, es, de } — affiché sur la page visiteur.",
       "text": "Texte lu par langue { fr, en, es, de } — source des mp3 TTS pré-générés.",
-      "tts": "Réglages ElevenLabs (voice_id, model_id, voice_settings). Stocké ici ; utilisé par le script de génération LOCAL, jamais en prod."
+      "tts": "Réglages ElevenLabs (voice_id, model_id, voice_settings). Stocké ici ; utilisé par le script de génération LOCAL, jamais en prod.",
+      "category": "Section de la galerie : \"experience\" (visite guidée) ou \"livre_blanc\" (livres blancs de l'Institut). Optionnel — défaut \"experience\"."
     },
     "id_format": "slug minuscules / chiffres / tirets (ex. artefact-01, reachy)."
   },
   "artefact-01": {
+    "category": "experience",
     "title": {
       "fr": "Bienvenue à l'Agentic Livepoint",
       "en": "Welcome to the Agentic Livepoint",
@@ -31,6 +33,7 @@
     }
   },
   "artefact-02": {
+    "category": "experience",
     "title": {
       "fr": "Le musée de l'IA",
       "en": "The AI museum",
@@ -53,6 +56,7 @@
     }
   },
   "artefact-03": {
+    "category": "experience",
     "title": {
       "fr": "La visite assistée — Meta Information",
       "en": "Assisted visit — Meta Information",
@@ -75,6 +79,7 @@
     }
   },
   "artefact-04": {
+    "category": "experience",
     "title": {
       "fr": "Projet Astra — l'assistant qui voit le monde",
       "en": "Project Astra — the assistant that sees the world",
@@ -97,6 +102,7 @@
     }
   },
   "artefact-05": {
+    "category": "experience",
     "title": {
       "fr": "Doublage vivant — votre voix dans toutes les langues",
       "en": "Living dubbing — your voice in every language",
@@ -119,6 +125,7 @@
     }
   },
   "artefact-06": {
+    "category": "experience",
     "title": {
       "fr": "Razer AVA — l'agent incarné",
       "en": "Razer AVA — the embodied agent",
@@ -141,6 +148,7 @@
     }
   },
   "artefact-07": {
+    "category": "experience",
     "title": {
       "fr": "World Models — toucher la prochaine rupture",
       "en": "World Models — touching the next breakthrough",
@@ -163,6 +171,7 @@
     }
   },
   "artefact-08": {
+    "category": "experience",
     "title": {
       "fr": "Digital Afterlife — la frontière éthique",
       "en": "Digital Afterlife — the ethical frontier",
@@ -174,6 +183,75 @@
       "en": "To finish, an experience that unsettles — and that's intentional. In China, services recreate interactive avatars of people who have passed away, from just a few photos and messages. The technique works — and that's exactly what raises the question. Consent, digital identity, data ownership: this shelf offers no answer, it opens the debate. Because knowing what AI can do doesn't tell us what it should do.",
       "es": "Para terminar, una experiencia que incomoda, y es deliberado. En China, algunos servicios recrean avatares interactivos de personas fallecidas a partir de unas pocas fotos y mensajes. La técnica funciona, y eso es precisamente lo que plantea la pregunta. Consentimiento, identidad digital, propiedad de los datos: esta estantería no da una respuesta, abre el debate. Porque saber lo que la IA puede hacer no nos dice lo que debería hacer.",
       "de": "Zum Abschluss ein Erlebnis, das verstört — und das ist Absicht. In China erstellen Dienste interaktive Avatare verstorbener Menschen aus nur wenigen Fotos und Nachrichten. Die Technik funktioniert — und genau das wirft die Frage auf. Einwilligung, digitale Identität, Eigentum an den Daten: Dieses Regal liefert keine Antwort, es eröffnet die Debatte. Denn zu wissen, was KI kann, sagt uns nicht, was sie tun sollte."
+    },
+    "tts": {
+      "voice_id": "21m00Tcm4TlvDq8ikWAM",
+      "model_id": "eleven_v3",
+      "voice_settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75
+      }
+    }
+  },
+  "artefact-09": {
+    "category": "livre_blanc",
+    "title": {
+      "fr": "Livre blanc — L'art du care : dessiner l'avenir de la santé",
+      "en": "White paper — The art of care: designing the future of health",
+      "es": "Libro blanco — El arte del care: diseñar el futuro de la salud",
+      "de": "Whitepaper — Die Kunst des Care: die Zukunft der Gesundheit gestalten"
+    },
+    "text": {
+      "fr": "Vous avez sous les yeux une étude qui part d'un constat simple : notre système de santé est sous tension, et l'intelligence artificielle débarque avec son lot d'espoirs comme d'inquiétudes. Mais l'idée forte de ce travail, c'est que le vrai défi n'est pas technologique. Il est avant tout humain, culturel et social. Pour le comprendre, l'Institut Onepoint a interrogé mille Français. Le résultat surprend : neuf sur dix voient les avancées médicales d'un bon œil, et près de la moitié aimeraient que leur médecin s'appuie davantage sur l'intelligence artificielle. Mais à une condition : de la transparence, de la traçabilité, et le droit de comprendre ce qui se décide pour eux. Ils acceptent volontiers une I.A. qui assiste le soignant, beaucoup moins une I.A. qui diagnostique toute seule. De là naît une notion centrale : le care by design. L'idée de concevoir des objets, des services et des lieux qui ne se contentent pas d'être efficaces, mais qui prennent vraiment soin des personnes, surtout les plus fragiles. Un feutre qui apaise la douleur des enfants, une application qui aide les patients étrangers à dialoguer avec l'hôpital, des centres pensés pour le bien-être des malades du cancer. Ce que vous retenez, au fond, c'est une conviction. La technologie ne remplace pas la main humaine, elle la prolonge. Bien pensée, l'intelligence artificielle peut redonner du temps aux soignants et remettre la relation, l'écoute et l'attention au cœur du soin. Prévenir plutôt que prédire, et faire du patient un véritable acteur de sa santé.",
+      "en": "You're looking at a study built on a simple observation: our healthcare system is under strain, and artificial intelligence is arriving with its share of hopes and fears. But the key insight here is that the real challenge isn't technological. It's first and foremost human, cultural and social. To understand it, the Onepoint Institute surveyed a thousand French people. The result is surprising: nine out of ten welcome medical advances, and nearly half would like their doctor to rely more on artificial intelligence. But on one condition: transparency, traceability, and the right to understand what's being decided for them. They happily accept an A.I. that assists the caregiver, far less one that diagnoses on its own. From this comes a central idea: care by design. Designing objects, services and places that aren't just efficient, but that truly take care of people, especially the most vulnerable. A pen that eases children's pain, an app that helps foreign patients communicate with the hospital, centers designed for the well-being of cancer patients. What you take away, ultimately, is a conviction. Technology doesn't replace the human hand, it extends it. Thoughtfully designed, artificial intelligence can give caregivers back their time and put relationship, listening and attention back at the heart of care. Preventing rather than predicting, and making the patient a true actor in their own health.",
+      "es": "Tienes ante ti un estudio que parte de una constatación simple: nuestro sistema de salud está bajo presión, y la inteligencia artificial llega con su carga de esperanzas y de inquietudes. Pero la idea fuerte de este trabajo es que el verdadero desafío no es tecnológico. Es ante todo humano, cultural y social. Para entenderlo, el Instituto Onepoint encuestó a mil franceses. El resultado sorprende: nueve de cada diez ven con buenos ojos los avances médicos, y casi la mitad querría que su médico se apoyara más en la inteligencia artificial. Pero con una condición: transparencia, trazabilidad y el derecho a comprender lo que se decide sobre ellos. Aceptan de buen grado una I.A. que asiste al profesional sanitario, mucho menos una I.A. que diagnostica por sí sola. De ahí nace una noción central: el care by design. La idea de concebir objetos, servicios y lugares que no se limiten a ser eficaces, sino que cuiden de verdad a las personas, sobre todo a las más frágiles. Un rotulador que calma el dolor de los niños, una aplicación que ayuda a los pacientes extranjeros a dialogar con el hospital, centros pensados para el bienestar de los enfermos de cáncer. Lo que retienes, en el fondo, es una convicción. La tecnología no reemplaza la mano humana, la prolonga. Bien pensada, la inteligencia artificial puede devolver tiempo a los cuidadores y volver a poner la relación, la escucha y la atención en el corazón del cuidado. Prevenir en lugar de predecir, y hacer del paciente un verdadero actor de su salud.",
+      "de": "Vor Ihnen liegt eine Studie, die von einer einfachen Feststellung ausgeht: Unser Gesundheitssystem steht unter Druck, und die künstliche Intelligenz kommt mit ihren Hoffnungen wie Befürchtungen. Doch die zentrale Erkenntnis dieser Arbeit ist: Die wahre Herausforderung ist nicht technologisch. Sie ist vor allem menschlich, kulturell und sozial. Um das zu verstehen, hat das Onepoint-Institut tausend Franzosen befragt. Das Ergebnis überrascht: Neun von zehn sehen medizinische Fortschritte positiv, und fast die Hälfte wünscht sich, dass ihr Arzt sich stärker auf künstliche Intelligenz stützt. Aber unter einer Bedingung: Transparenz, Nachvollziehbarkeit und das Recht zu verstehen, was über sie entschieden wird. Sie akzeptieren bereitwillig eine K.I., die die Pflegekraft unterstützt, viel weniger eine K.I., die allein diagnostiziert. Daraus entsteht ein zentraler Gedanke: care by design. Die Idee, Objekte, Dienste und Orte zu gestalten, die nicht nur effizient sind, sondern sich wirklich um die Menschen kümmern, vor allem um die verletzlichsten. Ein Stift, der den Schmerz von Kindern lindert, eine App, die ausländischen Patienten hilft, mit dem Krankenhaus zu sprechen, Zentren, die für das Wohl von Krebskranken gedacht sind. Was Sie im Grunde mitnehmen, ist eine Überzeugung. Die Technologie ersetzt die menschliche Hand nicht, sie verlängert sie. Klug gedacht, kann künstliche Intelligenz den Pflegekräften Zeit zurückgeben und die Beziehung, das Zuhören und die Aufmerksamkeit wieder in den Mittelpunkt der Pflege stellen. Vorbeugen statt vorhersagen, und den Patienten zu einem echten Akteur seiner Gesundheit machen."
+    },
+    "tts": {
+      "voice_id": "21m00Tcm4TlvDq8ikWAM",
+      "model_id": "eleven_v3",
+      "voice_settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75
+      }
+    }
+  },
+  "artefact-10": {
+    "category": "livre_blanc",
+    "title": {
+      "fr": "Livre blanc — Future of work : comment travaillera-t-on en 2035 ?",
+      "en": "White paper — Future of work: how will we work in 2035?",
+      "es": "Libro blanco — Future of work: ¿cómo trabajaremos en 2035?",
+      "de": "Whitepaper — Future of work: Wie werden wir 2035 arbeiten?"
+    },
+    "text": {
+      "fr": "Imaginez un enfant qui a onze ans aujourd'hui. Quel métier exercera-t-il en 2035, lorsqu'il aura vingt-cinq ans ? Et par combien de métiers différents sera-t-il déjà passé ? C'est par cette question toute simple que démarre cette étude de prospective, construite avec une vingtaine d'experts — économistes, sociologues du travail, prospectivistes — puis confrontée à l'opinion de deux mille Français interrogés par Kantar Public. Le premier enseignement, c'est que le travail ne sera plus jamais linéaire. En 2035, on ne fera plus un seul métier toute sa vie : un actif jonglera en moyenne avec un peu plus de deux activités différentes chaque jour, parfois sous plusieurs statuts. Et la grande majorité des Français en est déjà convaincue : on changera de métier de nombreuses fois au cours d'une carrière. Deuxième idée forte, et sans doute la plus rassurante : la technologie augmente le travailleur, elle ne le remplace pas. Pour trois métiers transformés ou automatisés, un nouveau métier se crée. Et plus de la moitié de l'activité de demain reposera sur des compétences profondément humaines — l'écoute, la créativité, le jugement — que la machine ne sait pas imiter. Troisième point : pour suivre ce rythme, on se formera presque en continu. Là où l'on consacre aujourd'hui quelques minutes par jour à apprendre, on y passera demain près de trois heures, en superposant temps de travail et temps d'apprentissage. Ce que vous retenez, c'est un optimisme lucide. Le futur du travail ne sera pas un duel entre l'homme et la machine, mais une intelligence humaine qui se réinvente, épaulée par la technologie.",
+      "en": "Picture a child who is eleven years old today. What job will they hold in 2035, when they turn twenty-five? And how many different jobs will they already have passed through? It's with this simple question that this foresight study begins, built with around twenty experts — economists, labor sociologists, futurists — then tested against the views of two thousand French people surveyed by Kantar Public. The first lesson is that work will never again be linear. In 2035, people will no longer do a single job their whole life: a worker will juggle, on average, a little more than two different activities each day, sometimes under several statuses. And the vast majority of French people are already convinced: we'll change careers many times over a working life. The second key idea, and probably the most reassuring: technology augments the worker, it doesn't replace them. For every three jobs transformed or automated, a new job is created. And more than half of tomorrow's activity will rely on deeply human skills — listening, creativity, judgment — that machines can't imitate. Third point: to keep pace, we'll train almost continuously. Where we devote a few minutes a day to learning today, tomorrow we'll spend nearly three hours, blending work time and learning time. What you take away is a clear-eyed optimism. The future of work won't be a duel between human and machine, but a human intelligence reinventing itself, supported by technology.",
+      "es": "Imagina a un niño que hoy tiene once años. ¿Qué oficio ejercerá en 2035, cuando tenga veinticinco? ¿Y por cuántos oficios diferentes habrá pasado ya? Con esta pregunta tan simple arranca este estudio de prospectiva, construido con una veintena de expertos — economistas, sociólogos del trabajo, prospectivistas — y luego contrastado con la opinión de dos mil franceses encuestados por Kantar Public. La primera enseñanza es que el trabajo ya nunca será lineal. En 2035 no se ejercerá un solo oficio toda la vida: un activo combinará de media algo más de dos actividades diferentes cada día, a veces bajo varios estatutos. Y la gran mayoría de los franceses ya está convencida: cambiaremos de oficio muchas veces a lo largo de una carrera. Segunda idea fuerte, y sin duda la más tranquilizadora: la tecnología aumenta al trabajador, no lo reemplaza. Por cada tres oficios transformados o automatizados, se crea uno nuevo. Y más de la mitad de la actividad del mañana se basará en competencias profundamente humanas — la escucha, la creatividad, el juicio — que la máquina no sabe imitar. Tercer punto: para seguir este ritmo, nos formaremos casi en continuo. Donde hoy dedicamos unos minutos al día a aprender, mañana pasaremos casi tres horas, superponiendo tiempo de trabajo y tiempo de aprendizaje. Lo que retienes es un optimismo lúcido. El futuro del trabajo no será un duelo entre el hombre y la máquina, sino una inteligencia humana que se reinventa, apoyada por la tecnología.",
+      "de": "Stellen Sie sich ein Kind vor, das heute elf Jahre alt ist. Welchen Beruf wird es 2035 ausüben, wenn es fünfundzwanzig ist? Und durch wie viele verschiedene Berufe wird es bis dahin schon gegangen sein? Mit dieser ganz einfachen Frage beginnt diese Zukunftsstudie, erarbeitet mit rund zwanzig Experten — Ökonomen, Arbeitssoziologen, Zukunftsforschern — und anschließend mit der Meinung von zweitausend Franzosen abgeglichen, die von Kantar Public befragt wurden. Die erste Erkenntnis: Arbeit wird nie wieder linear sein. 2035 übt man nicht mehr ein Leben lang einen einzigen Beruf aus: Ein Erwerbstätiger jongliert im Schnitt mit etwas mehr als zwei verschiedenen Tätigkeiten pro Tag, manchmal unter mehreren Status. Und die große Mehrheit der Franzosen ist bereits überzeugt: Man wird im Lauf eines Berufslebens viele Male den Beruf wechseln. Der zweite wichtige Gedanke, und wohl der beruhigendste: Die Technologie erweitert den Arbeitenden, sie ersetzt ihn nicht. Für drei umgewandelte oder automatisierte Berufe entsteht ein neuer. Und mehr als die Hälfte der Tätigkeit von morgen wird auf zutiefst menschlichen Fähigkeiten beruhen — Zuhören, Kreativität, Urteilsvermögen —, die die Maschine nicht nachahmen kann. Dritter Punkt: Um mit diesem Tempo Schritt zu halten, werden wir fast ununterbrochen lernen. Wo wir heute ein paar Minuten am Tag dem Lernen widmen, werden es morgen fast drei Stunden sein, in denen sich Arbeitszeit und Lernzeit überlagern. Was Sie mitnehmen, ist ein hellsichtiger Optimismus. Die Zukunft der Arbeit wird kein Duell zwischen Mensch und Maschine sein, sondern eine menschliche Intelligenz, die sich neu erfindet, unterstützt von der Technologie."
+    },
+    "tts": {
+      "voice_id": "21m00Tcm4TlvDq8ikWAM",
+      "model_id": "eleven_v3",
+      "voice_settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75
+      }
+    }
+  },
+  "artefact-11": {
+    "category": "livre_blanc",
+    "title": {
+      "fr": "Livre blanc — Recherche, développement & innovation",
+      "en": "White paper — Research, development & innovation",
+      "es": "Libro blanco — Investigación, desarrollo e innovación",
+      "de": "Whitepaper — Forschung, Entwicklung & Innovation"
+    },
+    "text": {
+      "fr": "Vous avez devant vous une étude née de la rencontre entre l'Institut Onepoint et l'ANRT, l'association qui rassemble les trois quarts de l'effort de recherche français. Son point de départ est une conviction simple : la recherche et le développement ne sont pas un luxe réservé aux grands groupes, mais une véritable assurance-vie pour les entreprises, et notamment pour les PME et les entreprises de taille intermédiaire. Pour le démontrer, les auteurs ont recueilli une quarantaine de témoignages de dirigeants, de chercheurs et de directeurs de l'innovation. Trois histoires françaises se détachent. Le groupe Laffort, leader mondial des produits du vin, qui a un jour basculé son budget publicité vers la recherche. LIM Group, ce sellier devenu numéro un grâce au pari d'une selle en matériaux composites. Et Berger-Levrault, imprimeur depuis le quinzième siècle, qui s'est réinventé en éditeur de logiciels. De ces parcours se dégage une leçon constante. Rien ne se fait sans l'engagement sincère du dirigeant, premier de cordée. Rien ne se fait non plus en vase clos : il faut tisser des liens patients avec le monde académique, par la thèse Cifre ou les laboratoires communs, et s'appuyer sur des dispositifs comme le Crédit Impôt Recherche. Ce que vous retenez, au fond, c'est que la recherche demande de l'humilité et du temps long. Elle accepte le risque, l'échec parfois, mais elle prépare l'avenir. Car la science, nous dit cette étude, est d'abord un état d'être avant d'être un état de faire.",
+      "en": "Before you is a study born from the meeting between the Onepoint Institute and the ANRT, the association that brings together three quarters of France's research effort. Its starting point is a simple conviction: research and development are not a luxury reserved for large groups, but a real life insurance for companies, especially for small and mid-sized businesses. To prove it, the authors gathered around forty accounts from executives, researchers and innovation directors. Three French stories stand out. The Laffort group, world leader in wine products, which one day shifted its advertising budget toward research. LIM Group, a saddle maker that became number one thanks to a bet on a composite-material saddle. And Berger-Levrault, a printer since the fifteenth century, which reinvented itself as a software publisher. From these journeys emerges a constant lesson. Nothing happens without the sincere commitment of the leader, first on the rope. Nothing happens in isolation either: you have to build patient ties with the academic world, through industrial PhD partnerships or shared laboratories, and rely on schemes like the research tax credit. What you take away, ultimately, is that research demands humility and the long term. It accepts risk, sometimes failure, but it prepares the future. Because science, this study tells us, is first a way of being before being a way of doing.",
+      "es": "Tienes ante ti un estudio nacido del encuentro entre el Instituto Onepoint y la ANRT, la asociación que reúne las tres cuartas partes del esfuerzo de investigación francés. Su punto de partida es una convicción simple: la investigación y el desarrollo no son un lujo reservado a los grandes grupos, sino un verdadero seguro de vida para las empresas, y en particular para las pymes y las empresas de tamaño intermedio. Para demostrarlo, los autores recogieron una cuarentena de testimonios de directivos, investigadores y directores de innovación. Tres historias francesas destacan. El grupo Laffort, líder mundial de los productos del vino, que un día trasladó su presupuesto de publicidad hacia la investigación. LIM Group, ese fabricante de sillas de montar que se convirtió en número uno gracias a la apuesta por una silla de materiales compuestos. Y Berger-Levrault, impresor desde el siglo quince, que se reinventó como editor de software. De estos recorridos se desprende una lección constante. Nada se hace sin el compromiso sincero del dirigente, primero de cordada. Nada se hace tampoco en vaso cerrado: hay que tejer vínculos pacientes con el mundo académico, mediante la tesis industrial o los laboratorios comunes, y apoyarse en dispositivos como el crédito fiscal a la investigación. Lo que retienes, en el fondo, es que la investigación exige humildad y tiempo largo. Acepta el riesgo, el fracaso a veces, pero prepara el futuro. Porque la ciencia, nos dice este estudio, es ante todo un estado del ser antes de ser un estado del hacer.",
+      "de": "Vor Ihnen liegt eine Studie, die aus der Begegnung zwischen dem Onepoint-Institut und der ANRT entstanden ist, dem Verband, der drei Viertel der französischen Forschungsanstrengung vereint. Ihr Ausgangspunkt ist eine einfache Überzeugung: Forschung und Entwicklung sind kein Luxus, der großen Konzernen vorbehalten ist, sondern eine echte Lebensversicherung für Unternehmen, insbesondere für kleine und mittlere Betriebe. Um das zu belegen, haben die Autoren rund vierzig Berichte von Führungskräften, Forschern und Innovationsdirektoren gesammelt. Drei französische Geschichten stechen hervor. Die Laffort-Gruppe, Weltmarktführer für Weinprodukte, die eines Tages ihr Werbebudget zugunsten der Forschung umschichtete. LIM Group, ein Sattler, der dank des Wagnisses eines Sattels aus Verbundwerkstoffen zur Nummer eins wurde. Und Berger-Levrault, seit dem fünfzehnten Jahrhundert Drucker, der sich als Softwareverlag neu erfunden hat. Aus diesen Wegen ergibt sich eine beständige Lehre. Nichts gelingt ohne das aufrichtige Engagement der Führungskraft, die vorangeht. Nichts gelingt auch im Alleingang: Man muss geduldig Verbindungen zur akademischen Welt knüpfen, über industrielle Doktorarbeiten oder gemeinsame Labore, und sich auf Instrumente wie die Forschungsförderung stützen. Was Sie im Grunde mitnehmen, ist, dass Forschung Demut und langen Atem verlangt. Sie akzeptiert das Risiko, manchmal das Scheitern, aber sie bereitet die Zukunft vor. Denn die Wissenschaft, so sagt uns diese Studie, ist zuerst ein Zustand des Seins, bevor sie ein Zustand des Tuns ist."
     },
     "tts": {
       "voice_id": "21m00Tcm4TlvDq8ikWAM",
